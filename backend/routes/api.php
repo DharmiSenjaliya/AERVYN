@@ -21,6 +21,16 @@ use App\Http\Controllers\Player\PlayerProfileController;
 use App\Http\Controllers\Player\PlayerAchievementController;
 use App\Http\Controllers\Player\PlayerStatisticsController;
 use App\Http\Controllers\Player\PlayerLeaderboardController;
+use App\Http\Controllers\Social\SocialHubController;
+use App\Http\Controllers\Social\PlayerSearchController;
+use App\Http\Controllers\Social\FriendController;
+use App\Http\Controllers\Social\BlockController;
+use App\Http\Controllers\Social\ChallengeController;
+use App\Http\Controllers\Social\SocialNotificationController;
+use App\Http\Controllers\Social\SocialPrivacyController;
+use App\Http\Controllers\Social\SocialReportController;
+use App\Http\Controllers\Social\SocialLeaderboardController;
+use App\Http\Controllers\Admin\AdminSocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +71,51 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/achievements', [PlayerAchievementController::class, 'index']);
         Route::post('/achievements/check', [PlayerAchievementController::class, 'check']);
         Route::get('/leaderboard', [PlayerLeaderboardController::class, 'index']);
+    });
+
+    // Online Social Hub, Friends, Challenges, Notifications & Privacy
+    Route::prefix('social')->group(function () {
+        Route::get('/hub', [SocialHubController::class, 'index']);
+        Route::get('/search', [PlayerSearchController::class, 'search']);
+        Route::get('/profile/{id}', [PlayerSearchController::class, 'publicProfile']);
+
+        // Friends
+        Route::get('/friends', [FriendController::class, 'index']);
+        Route::get('/requests', [FriendController::class, 'requests']);
+        Route::post('/requests', [FriendController::class, 'sendRequest']);
+        Route::post('/requests/{id}/accept', [FriendController::class, 'acceptRequest']);
+        Route::post('/requests/{id}/reject', [FriendController::class, 'rejectRequest']);
+        Route::post('/requests/{id}/cancel', [FriendController::class, 'cancelRequest']);
+        Route::delete('/friends/{friendId}', [FriendController::class, 'removeFriend']);
+
+        // Blocks
+        Route::get('/blocks', [BlockController::class, 'index']);
+        Route::post('/blocks', [BlockController::class, 'block']);
+        Route::delete('/blocks/{blockedUserId}', [BlockController::class, 'unblock']);
+
+        // Challenges
+        Route::get('/challenges/templates', [ChallengeController::class, 'templates']);
+        Route::get('/challenges', [ChallengeController::class, 'index']);
+        Route::post('/challenges', [ChallengeController::class, 'create']);
+        Route::post('/challenges/{id}/accept', [ChallengeController::class, 'accept']);
+        Route::post('/challenges/{id}/reject', [ChallengeController::class, 'reject']);
+        Route::post('/challenges/{id}/cancel', [ChallengeController::class, 'cancel']);
+        Route::post('/challenges/{id}/submit', [ChallengeController::class, 'submitResult']);
+
+        // Notifications
+        Route::get('/notifications', [SocialNotificationController::class, 'index']);
+        Route::post('/notifications/{id}/read', [SocialNotificationController::class, 'markRead']);
+        Route::post('/notifications/read-all', [SocialNotificationController::class, 'markAllRead']);
+
+        // Privacy
+        Route::get('/privacy', [SocialPrivacyController::class, 'show']);
+        Route::put('/privacy', [SocialPrivacyController::class, 'update']);
+
+        // Reports
+        Route::post('/reports', [SocialReportController::class, 'store']);
+
+        // Leaderboard
+        Route::get('/leaderboard', [SocialLeaderboardController::class, 'index']);
     });
 
     // Professional Admin Panel Endpoints (Admin Guard)
@@ -118,5 +173,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/media', [AdminMediaController::class, 'index']);
         Route::post('/media/upload', [AdminMediaController::class, 'upload']);
         Route::delete('/media/{filename}', [AdminMediaController::class, 'destroy']);
+
+        // 13. Social Moderation & Challenge Management
+        Route::get('/social/overview', [AdminSocialController::class, 'index']);
+        Route::get('/social/reports', [AdminSocialController::class, 'reports']);
+        Route::put('/social/reports/{id}', [AdminSocialController::class, 'updateReport']);
+        Route::get('/social/challenges', [AdminSocialController::class, 'challenges']);
+        Route::post('/social/users/{userId}/suspend', [AdminSocialController::class, 'toggleSuspension']);
     });
 });

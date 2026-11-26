@@ -20,6 +20,17 @@ import StatisticsPage from '../pages/player/StatisticsPage';
 import AchievementsPage from '../pages/player/AchievementsPage';
 import LeaderboardPage from '../pages/player/LeaderboardPage';
 
+// Social Hub & Layer
+import SocialLayout from '../layouts/SocialLayout';
+import SocialHubPage from '../pages/social/SocialHubPage';
+import FriendsPage from '../pages/social/FriendsPage';
+import FriendRequestsPage from '../pages/social/FriendRequestsPage';
+import ChallengesPage from '../pages/social/ChallengesPage';
+import PlayerSearchPage from '../pages/social/PlayerSearchPage';
+import SocialLeaderboardPage from '../pages/social/SocialLeaderboardPage';
+import SocialNotificationsPage from '../pages/social/SocialNotificationsPage';
+import SocialPrivacyPage from '../pages/social/SocialPrivacyPage';
+
 // Admin Pages
 import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
 import PlayerManagementPage from '../pages/admin/PlayerManagementPage';
@@ -33,6 +44,7 @@ import AdminUsersPage from '../pages/admin/AdminUsersPage';
 import ActivityLogsPage from '../pages/admin/ActivityLogsPage';
 import AdminSettingsPage from '../pages/admin/AdminSettingsPage';
 import MediaManagementPage from '../pages/admin/MediaManagementPage';
+import AdminSocialPage from '../pages/admin/AdminSocialPage';
 
 // 3D Game Engine View
 import GameView from '../pages/game/GameView';
@@ -93,7 +105,27 @@ export default function AppRoutes() {
         <Route path="inventory" element={<StatisticsPage />} />
       </Route>
 
-      {/* 4. Professional Admin Panel */}
+      {/* 4. AERVYN Online Social Hub & Community Layer */}
+      <Route
+        path="/social"
+        element={
+          <ProtectedRoute>
+            <SocialLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<SocialHubPage />} />
+        <Route path="friends" element={<FriendsPage />} />
+        <Route path="requests" element={<FriendRequestsPage />} />
+        <Route path="challenges" element={<ChallengesPage />} />
+        <Route path="search" element={<PlayerSearchPage />} />
+        <Route path="leaderboard" element={<SocialLeaderboardPage />} />
+        <Route path="notifications" element={<SocialNotificationsPage />} />
+        <Route path="privacy" element={<SocialPrivacyPage />} />
+        <Route path="settings" element={<SocialPrivacyPage />} />
+      </Route>
+
+      {/* 5. Professional Admin Panel */}
       <Route
         path="/admin"
         element={
@@ -105,6 +137,7 @@ export default function AppRoutes() {
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboardPage />} />
         <Route path="players" element={<PlayerManagementPage />} />
+        <Route path="social" element={<AdminSocialPage />} />
         <Route path="worlds" element={<WorldManagementPage />} />
         <Route path="levels" element={<WorldManagementPage />} />
         <Route path="missions" element={<MissionManagementPage />} />

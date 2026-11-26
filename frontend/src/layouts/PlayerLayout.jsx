@@ -16,7 +16,8 @@ import {
   Menu,
   X,
   Trophy,
-  BarChart3
+  BarChart3,
+  Users
 } from 'lucide-react';
 import Logo from '../components/common/Logo';
 import Button from '../components/common/Button';
@@ -55,7 +56,8 @@ export default function PlayerLayout() {
     { label: 'Profile', path: '/player/profile', icon: User },
     { label: 'Achievements', path: '/player/achievements', icon: Award },
     { label: 'Statistics', path: '/player/statistics', icon: BarChart3 },
-    { label: 'Leaderboard', path: '/player/leaderboard', icon: Trophy }
+    { label: 'Leaderboard', path: '/player/leaderboard', icon: Trophy },
+    { label: 'Social Hub', path: '/social', icon: Users }
   ];
 
   const handleLogout = async () => {

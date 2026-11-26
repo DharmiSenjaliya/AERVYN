@@ -24,6 +24,8 @@ class User extends Authenticatable
         'xp',
         'is_active',
         'is_banned',
+        'is_social_suspended',
+        'social_suspended_reason',
         'last_login_at',
     ];
 
@@ -40,6 +42,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
             'is_banned' => 'boolean',
+            'is_social_suspended' => 'boolean',
             'level' => 'integer',
             'xp' => 'integer',
         ];
@@ -80,6 +83,102 @@ class User extends Authenticatable
         return $this->belongsToMany(Achievement::class, 'user_achievements', 'user_id', 'achievement_id')
             ->withPivot('unlocked_at', 'xp_awarded')
             ->withTimestamps();
+    }
+
+    public function friendships()
+    {
+        return $this->hasMany(Friendship::class, 'user_id');
+    }
+
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
+            ->withTimestamps();
+    }
+
+    public function sentFriendRequests()
+    {
+        return $this->hasMany(FriendRequest::class, 'sender_id');
+    }
+
+    public function receivedFriendRequests()
+    {
+        return $this->hasMany(FriendRequest::class, 'receiver_id');
+    }
+
+    public function blockedPlayers()
+    {
+        return $this->hasMany(BlockedPlayer::class, 'user_id');
+    }
+
+    public function blockedByPlayers()
+    {
+        return $this->hasMany(BlockedPlayer::class, 'blocked_user_id');
+    }
+
+    public function challengesCreated()
+    {
+        return $this->hasMany(Challenge::class, 'challenger_id');
+    }
+
+    public function challengesReceived()
+    {
+        return $this->hasMany(Challenge::class, 'opponent_id');
+    }
+
+    public function socialNotifications()
+    {
+        return $this->hasMany(SocialNotification::class, 'user_id');
+    }
+
+    public function privacySettings()
+    {
+        return $this->hasOne(PlayerPrivacySetting::class, 'user_id');
+    }
+
+    public function reportsFiled()
+    {
+        return $this->hasMany(PlayerReport::class, 'reporter_id');
+    }
+
+    public function reportsAgainst()
+    {
+        return $this->hasMany(PlayerReport::class, 'reported_user_id');
+    }
+
+    public function socialActivities()
+    {
+        return $this->hasMany(SocialActivity::class, 'user_id');
+    }
+
+    public function isFriendWith(int $userId): bool
+    {
+        return $this->friendships()->where('friend_id', $userId)->exists();
+    }
+
+    public function hasBlocked(int $userId): bool
+    {
+        return $this->blockedPlayers()->where('blocked_user_id', $userId)->exists();
+    }
+
+    public function isBlockedBy(int $userId): bool
+    {
+        return BlockedPlayer::where('user_id', $userId)->where('blocked_user_id', $this->id)->exists();
+    }
+
+    public function getPrivacy(): PlayerPrivacySetting
+    {
+        return $this->privacySettings()->firstOrCreate(
+            ['user_id' => $this->id],
+            [
+                'allow_friend_requests' => true,
+                'show_public_profile' => true,
+                'show_achievements' => true,
+                'show_leaderboard_profile' => true,
+                'show_selected_ending' => true,
+                'show_challenge_statistics' => true,
+            ]
+        );
     }
 
     public function isAdmin(): bool

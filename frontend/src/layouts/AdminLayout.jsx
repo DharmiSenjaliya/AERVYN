@@ -29,7 +29,8 @@ import {
   Menu,
   X,
   Search,
-  ExternalLink
+  ExternalLink,
+  ShieldAlert
 } from 'lucide-react';
 import Logo from '../components/common/Logo';
 import Badge from '../components/common/Badge';
@@ -53,6 +54,7 @@ export default function AdminLayout() {
   const adminNav = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { label: 'Players', path: '/admin/players', icon: Users },
+    { label: 'Social Moderation', path: '/admin/social', icon: ShieldAlert },
     { label: 'Game Worlds', path: '/admin/worlds', icon: Globe },
     { label: 'Levels', path: '/admin/levels', icon: Layers },
     { label: 'Missions', path: '/admin/missions', icon: Scroll },
