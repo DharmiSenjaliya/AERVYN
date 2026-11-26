@@ -155,8 +155,9 @@ export default function AdminSocialPage() {
 
   const getStatusBadge = (status) => {
     switch (status) {
+      case 'new':
       case 'pending':
-        return <Badge variant="warning">Pending</Badge>;
+        return <Badge variant="warning">New</Badge>;
       case 'reviewing':
         return <Badge variant="info">Reviewing</Badge>;
       case 'resolved':
@@ -189,8 +190,11 @@ export default function AdminSocialPage() {
     const q = challengeSearch.toLowerCase();
     return (
       c.title?.toLowerCase().includes(q) ||
+      c.challenger?.name?.toLowerCase().includes(q) ||
+      c.opponent?.name?.toLowerCase().includes(q) ||
       c.creator?.name?.toLowerCase().includes(q) ||
       c.recipient?.name?.toLowerCase().includes(q) ||
+      c.challenge_type?.toLowerCase().includes(q) ||
       c.challenge_template?.toLowerCase().includes(q)
     );
   });
@@ -286,7 +290,7 @@ export default function AdminSocialPage() {
               <Filter className="w-3.5 h-3.5 text-cyan-400" />
               <span>Filter Status:</span>
             </div>
-            {['all', 'pending', 'reviewing', 'resolved', 'rejected'].map(st => (
+            {['all', 'new', 'reviewing', 'resolved', 'rejected'].map(st => (
               <button
                 key={st}
                 onClick={() => setReportStatus(st)}
@@ -343,7 +347,7 @@ export default function AdminSocialPage() {
                   </thead>
                   <tbody className="divide-y divide-slate-800/60">
                     {reports.map(rep => {
-                      const reported = rep.reported_user || {};
+                      const reported = rep.reported_user || rep.reportedUser || {};
                       const reporter = rep.reporter || {};
 
                       return (
@@ -351,7 +355,7 @@ export default function AdminSocialPage() {
                           <td className="p-3.5 font-mono text-slate-500">#{rep.id}</td>
                           <td className="p-3.5 font-medium text-white">
                             <div className="flex items-center gap-2">
-                              <span>{reported.name || `User #${rep.reported_user_id}`}</span>
+                              <span>{reported.name || `User #${rep.reported_user_id || rep.reportedUserId}`}</span>
                               {reported.is_social_suspended && (
                                 <span className="px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 text-[10px] font-bold border border-rose-500/30">
                                   Suspended
@@ -447,12 +451,12 @@ export default function AdminSocialPage() {
                         <div>
                           <span>{ch.title}</span>
                           <span className="block text-[10px] text-cyan-400 font-mono">
-                            {ch.challenge_template}
+                            {ch.challenge_type || ch.challenge_template}
                           </span>
                         </div>
                       </td>
-                      <td className="p-3.5 text-slate-300">{ch.creator?.name || `User #${ch.creator_id}`}</td>
-                      <td className="p-3.5 text-slate-300">{ch.recipient?.name || `User #${ch.recipient_id}`}</td>
+                      <td className="p-3.5 text-slate-300">{ch.challenger?.name || ch.creator?.name || `User #${ch.challenger_id || ch.creator_id}`}</td>
+                      <td className="p-3.5 text-slate-300">{ch.opponent?.name || ch.recipient?.name || `User #${ch.opponent_id || ch.recipient_id}`}</td>
                       <td className="p-3.5 font-mono text-amber-300">
                         {ch.target_value} {ch.target_metric}
                       </td>

@@ -16,6 +16,12 @@ export default function GameSettings({ onClose = () => {} }) {
 
   const handleSave = () => {
     AudioSystem.playInteract();
+    try {
+      localStorage.setItem('aervyn_graphics_quality', quality);
+      localStorage.setItem('aervyn_sfx_volume', String(sfxVol / 100));
+      localStorage.setItem('aervyn_sensitivity', String(sensitivity));
+    } catch {}
+
     GameState.setState({
       settings: {
         ...currentSettings,

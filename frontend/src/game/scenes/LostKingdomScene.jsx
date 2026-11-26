@@ -5,6 +5,7 @@ import LostKingdom from '../worlds/lost-kingdom/LostKingdom';
 import PlayerCharacter from '../characters/PlayerCharacter';
 import ThirdPersonCamera from '../camera/ThirdPersonCamera';
 import LoadingScreen from '../../components/common/LoadingScreen';
+import useGraphicsSettings from '../engine/useGraphicsSettings';
 
 /**
  * World 1: The Lost Kingdom 3D Canvas Scene
@@ -12,16 +13,18 @@ import LoadingScreen from '../../components/common/LoadingScreen';
  */
 export default function LostKingdomScene({ mobileInput = null }) {
   const playerRef = useRef();
+  const graphics = useGraphicsSettings();
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       <Suspense fallback={<LoadingScreen message="Assembling The Lost Kingdom..." />}>
         <Canvas
-          shadows
+          shadows={graphics.shadows}
+          dpr={graphics.dpr}
           gl={{
-            antialias: true,
-            powerPreference: 'high-performance',
-            toneMappingExposure: 1.1
+            antialias: graphics.antialias,
+            powerPreference: graphics.powerPreference,
+            toneMappingExposure: graphics.toneMappingExposure
           }}
           style={{ background: '#080B18' }}
         >
@@ -30,7 +33,7 @@ export default function LostKingdomScene({ mobileInput = null }) {
           <fog attach="fog" args={['#080B18', 18, 70]} />
 
           {/* Celestial Cosmic Sky */}
-          <Stars radius={90} depth={50} count={3500} factor={4} saturation={0.6} fade speed={1.2} />
+          <Stars radius={90} depth={50} count={graphics.starCount} factor={4} saturation={0.6} fade speed={1.2} />
 
           {/* Primary Ambient Light */}
           <ambientLight intensity={0.45} />
@@ -40,9 +43,9 @@ export default function LostKingdomScene({ mobileInput = null }) {
             position={[20, 30, 15]}
             intensity={1.3}
             color="#C8E0FF"
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
+            castShadow={graphics.shadows}
+            shadow-mapSize-width={graphics.shadowMapSize}
+            shadow-mapSize-height={graphics.shadowMapSize}
             shadow-camera-near={0.5}
             shadow-camera-far={80}
             shadow-camera-left={-30}

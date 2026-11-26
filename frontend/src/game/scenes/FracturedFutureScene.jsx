@@ -5,6 +5,7 @@ import FracturedFuture from '../worlds/fractured-future/FracturedFuture';
 import PlayerCharacter from '../characters/PlayerCharacter';
 import ThirdPersonCamera from '../camera/ThirdPersonCamera';
 import LoadingScreen from '../../components/common/LoadingScreen';
+import useGraphicsSettings from '../engine/useGraphicsSettings';
 
 /**
  * World 3: The Fractured Future - 3D Canvas Scene
@@ -13,16 +14,18 @@ import LoadingScreen from '../../components/common/LoadingScreen';
  */
 export default function FracturedFutureScene({ mobileInput = null }) {
   const playerRef = useRef();
+  const graphics = useGraphicsSettings();
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       <Suspense fallback={<LoadingScreen message="Transcending to The Fractured Future..." />}>
         <Canvas
-          shadows
+          shadows={graphics.shadows}
+          dpr={graphics.dpr}
           gl={{
-            antialias: true,
-            powerPreference: 'high-performance',
-            toneMappingExposure: 1.2
+            antialias: graphics.antialias,
+            powerPreference: graphics.powerPreference,
+            toneMappingExposure: graphics.toneMappingExposure
           }}
           style={{ background: '#060412' }}
         >
@@ -31,7 +34,7 @@ export default function FracturedFutureScene({ mobileInput = null }) {
           <fog attach="fog" args={['#060412', 18, 75]} />
 
           {/* Celestial Cosmic Starfield */}
-          <Stars radius={95} depth={50} count={3000} factor={4} saturation={0.9} fade speed={2.0} />
+          <Stars radius={95} depth={50} count={graphics.starCount} factor={4} saturation={0.9} fade speed={2.0} />
 
           {/* Ambient Cosmic Fill Light */}
           <ambientLight intensity={0.55} color="#8b7ab8" />
@@ -41,9 +44,9 @@ export default function FracturedFutureScene({ mobileInput = null }) {
             position={[20, 38, 16]}
             intensity={1.5}
             color="#D8B4FE"
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
+            castShadow={graphics.shadows}
+            shadow-mapSize-width={graphics.shadowMapSize}
+            shadow-mapSize-height={graphics.shadowMapSize}
             shadow-camera-near={0.5}
             shadow-camera-far={95}
             shadow-camera-left={-36}

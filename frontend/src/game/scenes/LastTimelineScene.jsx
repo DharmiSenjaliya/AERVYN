@@ -5,6 +5,7 @@ import LastTimeline from '../worlds/last-timeline/LastTimeline';
 import PlayerCharacter from '../characters/PlayerCharacter';
 import ThirdPersonCamera from '../camera/ThirdPersonCamera';
 import LoadingScreen from '../../components/common/LoadingScreen';
+import useGraphicsSettings from '../engine/useGraphicsSettings';
 
 /**
  * World 4: The Last Timeline (The Zero Horizon) - 3D Canvas Scene
@@ -13,16 +14,18 @@ import LoadingScreen from '../../components/common/LoadingScreen';
  */
 export default function LastTimelineScene({ mobileInput = null }) {
   const playerRef = useRef();
+  const graphics = useGraphicsSettings();
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       <Suspense fallback={<LoadingScreen message="Transcending to The Last Timeline (Zero Horizon)..." />}>
         <Canvas
-          shadows
+          shadows={graphics.shadows}
+          dpr={graphics.dpr}
           gl={{
-            antialias: true,
-            powerPreference: 'high-performance',
-            toneMappingExposure: 1.25
+            antialias: graphics.antialias,
+            powerPreference: graphics.powerPreference,
+            toneMappingExposure: graphics.toneMappingExposure
           }}
           style={{ background: '#04020C' }}
         >
@@ -31,7 +34,7 @@ export default function LastTimelineScene({ mobileInput = null }) {
           <fog attach="fog" args={['#04020C', 20, 85]} />
 
           {/* Celestial Cosmic Starfield */}
-          <Stars radius={100} depth={55} count={3500} factor={4.5} saturation={0.9} fade speed={1.5} />
+          <Stars radius={100} depth={55} count={graphics.starCount} factor={4.5} saturation={0.9} fade speed={1.5} />
 
           {/* Ambient Celestial Fill Light */}
           <ambientLight intensity={0.6} color="#C4B5FD" />
@@ -41,9 +44,9 @@ export default function LastTimelineScene({ mobileInput = null }) {
             position={[22, 42, 18]}
             intensity={1.8}
             color="#FEF08A"
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
+            castShadow={graphics.shadows}
+            shadow-mapSize-width={graphics.shadowMapSize}
+            shadow-mapSize-height={graphics.shadowMapSize}
             shadow-camera-near={0.5}
             shadow-camera-far={95}
             shadow-camera-left={-35}

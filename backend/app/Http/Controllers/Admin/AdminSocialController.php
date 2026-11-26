@@ -19,9 +19,10 @@ class AdminSocialController extends Controller
     public function index()
     {
         return response()->json([
+            'success' => true,
             'status' => 'success',
             'data' => [
-                'total_friendships' => Friendship::count() / 2, // symmetrical pairs
+                'total_friendships' => (int) (Friendship::count() / 2), // symmetrical pairs
                 'total_challenges' => Challenge::count(),
                 'active_challenges' => Challenge::where('status', 'active')->count(),
                 'completed_challenges' => Challenge::where('status', 'completed')->count(),
@@ -49,8 +50,14 @@ class AdminSocialController extends Controller
         $reports = $query->paginate(20);
 
         return response()->json([
+            'success' => true,
             'status' => 'success',
-            'data' => $reports,
+            'data' => $reports->items(),
+            'pagination' => [
+                'current_page' => $reports->currentPage(),
+                'last_page' => $reports->lastPage(),
+                'total' => $reports->total(),
+            ]
         ]);
     }
 
@@ -85,6 +92,7 @@ class AdminSocialController extends Controller
         );
 
         return response()->json([
+            'success' => true,
             'status' => 'success',
             'message' => 'Report status updated.',
             'report' => $report,
@@ -101,8 +109,14 @@ class AdminSocialController extends Controller
             ->paginate(25);
 
         return response()->json([
+            'success' => true,
             'status' => 'success',
-            'data' => $challenges,
+            'data' => $challenges->items(),
+            'pagination' => [
+                'current_page' => $challenges->currentPage(),
+                'last_page' => $challenges->lastPage(),
+                'total' => $challenges->total(),
+            ]
         ]);
     }
 
@@ -129,6 +143,7 @@ class AdminSocialController extends Controller
         );
 
         return response()->json([
+            'success' => true,
             'status' => 'success',
             'message' => $request->suspend
                 ? "Social access suspended for player {$user->name}."

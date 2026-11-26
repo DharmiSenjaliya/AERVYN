@@ -199,7 +199,13 @@ class GameStateManager {
         musicVolume: 0.5,
         sfxVolume: 0.8,
         mouseSensitivity: 1.0,
-        graphicsQuality: 'high',
+        graphicsQuality: (() => {
+          try {
+            return localStorage.getItem('aervyn_graphics_quality') || 'high';
+          } catch {
+            return 'high';
+          }
+        })(),
         cameraDistance: 7.0
       }
     };

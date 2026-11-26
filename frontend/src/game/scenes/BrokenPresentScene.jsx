@@ -5,6 +5,7 @@ import BrokenPresent from '../worlds/broken-present/BrokenPresent';
 import PlayerCharacter from '../characters/PlayerCharacter';
 import ThirdPersonCamera from '../camera/ThirdPersonCamera';
 import LoadingScreen from '../../components/common/LoadingScreen';
+import useGraphicsSettings from '../engine/useGraphicsSettings';
 
 /**
  * World 2: The Broken Present - 3D Canvas Scene
@@ -13,16 +14,18 @@ import LoadingScreen from '../../components/common/LoadingScreen';
  */
 export default function BrokenPresentScene({ mobileInput = null }) {
   const playerRef = useRef();
+  const graphics = useGraphicsSettings();
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
       <Suspense fallback={<LoadingScreen message="Assembling The Broken Present..." />}>
         <Canvas
-          shadows
+          shadows={graphics.shadows}
+          dpr={graphics.dpr}
           gl={{
-            antialias: true,
-            powerPreference: 'high-performance',
-            toneMappingExposure: 1.15
+            antialias: graphics.antialias,
+            powerPreference: graphics.powerPreference,
+            toneMappingExposure: graphics.toneMappingExposure
           }}
           style={{ background: '#050814' }}
         >
@@ -31,7 +34,7 @@ export default function BrokenPresentScene({ mobileInput = null }) {
           <fog attach="fog" args={['#050814', 16, 68]} />
 
           {/* Deep Smoggy Stars */}
-          <Stars radius={85} depth={45} count={2200} factor={3} saturation={0.8} fade speed={1.5} />
+          <Stars radius={85} depth={45} count={Math.min(graphics.starCount, 2200)} factor={3} saturation={0.8} fade speed={1.5} />
 
           {/* Ambient Cyber Lighting */}
           <ambientLight intensity={0.5} color="#90a4ce" />
@@ -41,9 +44,9 @@ export default function BrokenPresentScene({ mobileInput = null }) {
             position={[18, 32, 12]}
             intensity={1.4}
             color="#A8CFFF"
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
+            castShadow={graphics.shadows}
+            shadow-mapSize-width={graphics.shadowMapSize}
+            shadow-mapSize-height={graphics.shadowMapSize}
             shadow-camera-near={0.5}
             shadow-camera-far={85}
             shadow-camera-left={-32}

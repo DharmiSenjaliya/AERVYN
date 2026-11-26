@@ -39,11 +39,11 @@ use App\Http\Controllers\Admin\AdminSocialController;
 */
 
 // Public Authentication & Feedback Endpoints
-Route::prefix('auth')->group(function () {
+Route::prefix('auth')->middleware('throttle:auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 });
-Route::post('/feedback', [AdminFeedbackController::class, 'store']);
+Route::post('/feedback', [AdminFeedbackController::class, 'store'])->middleware('throttle:auth');
 
 // Authenticated Routes (Sanctum Guard)
 Route::middleware('auth:sanctum')->group(function () {
