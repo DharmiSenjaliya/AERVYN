@@ -85,6 +85,11 @@ class DesktopControlsManager {
       window.dispatchEvent(new CustomEvent('aervyn:toggle-inventory'));
     }
 
+    // Story Journal toggle [J]
+    if (key === 'j') {
+      window.dispatchEvent(new CustomEvent('aervyn:toggle-journal'));
+    }
+
     // Pause toggle [ESC]
     if (e.key === 'Escape') {
       GameState.setScene('paused');

@@ -258,6 +258,16 @@ export default function DashboardPage() {
                 Celestial floating islands, 3 Chrono Shards, Time Labyrinth, and The Chronarch boss encounter.
               </p>
             </div>
+
+            <div style={{ padding: '0.85rem 1rem', background: 'rgba(56, 189, 248, 0.1)', border: '1px solid #38BDF8', borderRadius: 'var(--radius-sm)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <strong style={{ color: '#FFFFFF', fontSize: '0.92rem' }}>World 4: The Last Timeline</strong>
+                <Badge variant="cyan" size="sm">Playable</Badge>
+              </div>
+              <p style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', margin: '0.35rem 0 0 0' }}>
+                Celestial singularity nexus, Continuum Synchronization Matrix, and the Final Reality Choice.
+              </p>
+            </div>
           </div>
         </Card>
       </div>

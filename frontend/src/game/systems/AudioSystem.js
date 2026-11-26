@@ -512,6 +512,119 @@ class AudioSystemManager {
       osc.stop(ctx.currentTime + 0.3);
     } catch {}
   }
+
+  // 17. Continuum Matrix Keystone Resonance
+  playMatrixAlign() {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+
+      const freqs = [523.25, 659.25, 783.99]; // C5, E5, G5
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.06);
+
+        const vol = 0.16 * this.getSfxVolume();
+        gain.gain.setValueAtTime(0.001, ctx.currentTime);
+        gain.gain.setValueAtTime(vol, ctx.currentTime + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.06 + 0.5);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(ctx.currentTime + idx * 0.06);
+        osc.stop(ctx.currentTime + idx * 0.06 + 0.5);
+      });
+    } catch {}
+  }
+
+  // 18. Continuum Matrix Fully Synchronized
+  playMatrixComplete() {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+
+      const chord = [261.63, 329.63, 392.00, 523.25, 659.25, 1046.50]; // Grand C Major spread
+      chord.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08);
+
+        const vol = 0.15 * this.getSfxVolume();
+        gain.gain.setValueAtTime(0.001, ctx.currentTime);
+        gain.gain.setValueAtTime(vol, ctx.currentTime + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 1.2);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(ctx.currentTime + idx * 0.08);
+        osc.stop(ctx.currentTime + idx * 0.08 + 1.2);
+      });
+    } catch {}
+  }
+
+  // 19. Dialogue Typewriter Acoustic Blip
+  playDialogueBlip() {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(740 + Math.random() * 80, ctx.currentTime);
+
+      const vol = 0.05 * this.getSfxVolume();
+      gain.gain.setValueAtTime(vol, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.04);
+    } catch {}
+  }
+
+  // 20. Cosmic Ending Temporal Decision Surge
+  playEndingDecision() {
+    try {
+      const ctx = this.getContext();
+      if (!ctx) return;
+
+      // Low frequency rumble + sweeping harmonics
+      const osc = ctx.createOscillator();
+      const filter = ctx.createBiquadFilter();
+      const gain = ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(65.41, ctx.currentTime); // C2
+      osc.frequency.exponentialRampToValueAtTime(261.63, ctx.currentTime + 1.5); // C4
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(180, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(3200, ctx.currentTime + 1.2);
+
+      const vol = 0.28 * this.getSfxVolume();
+      gain.gain.setValueAtTime(0.01, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.3);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.0);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 2.0);
+    } catch {}
+  }
 }
 
 export const AudioSystem = new AudioSystemManager();

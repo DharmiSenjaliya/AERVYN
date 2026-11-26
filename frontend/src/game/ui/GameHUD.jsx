@@ -8,7 +8,8 @@ import {
   Volume2,
   VolumeX,
   Backpack,
-  Compass
+  Compass,
+  BookOpen
 } from 'lucide-react';
 import GameState from '../engine/GameState';
 import AudioSystem from '../systems/AudioSystem';
@@ -42,9 +43,11 @@ export default function GameHUD({ onPause = () => {}, isMobile = false }) {
     };
   }, []);
 
-  const { player, mission, inventory, interactionPrompt, worldName, worldId, boss } = hudState;
+  const { player, mission, inventory, interactionPrompt, worldName, worldId, boss, objects } = hudState;
   const isWorld2 = worldId === 'world_2';
   const isWorld3 = worldId === 'world_3';
+  const isWorldFinal = worldId === 'world_final';
+  const matrix = objects?.synchronizationMatrix || {};
   const fragments = inventory?.fragmentsCollected || 0;
   const cores = inventory?.quantumCoresCollected || inventory?.coresCollected || 0;
   const shards = inventory?.chronoShardsCollected || 0;
@@ -131,8 +134,32 @@ export default function GameHUD({ onPause = () => {}, isMobile = false }) {
             </Badge>
           </div>
 
-          {/* Top Right Controls: Inventory, Audio & Pause */}
+          {/* Top Right Controls: Inventory, Journal, Audio & Pause */}
           <div style={{ display: 'flex', gap: '0.5rem' }}>
+            {/* Story Journal Button */}
+            <button
+              onClick={() => {
+                AudioSystem.playInteract();
+                window.dispatchEvent(new CustomEvent('aervyn:toggle-journal'));
+              }}
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                background: 'rgba(22, 30, 53, 0.85)',
+                border: '1px solid var(--border-gold)',
+                color: 'var(--color-gold)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+              aria-label="Story Journal [J]"
+              title="Story Journal [J]"
+            >
+              <BookOpen size={16} />
+            </button>
+
             {/* Inventory Button */}
             <button
               onClick={() => {
@@ -334,7 +361,29 @@ export default function GameHUD({ onPause = () => {}, isMobile = false }) {
             onClick={() => setInventoryOpen(true)}
             title="Click to view Inventory [I]"
           >
-            {isWorld3 ? (
+            {isWorldFinal ? (
+              <>
+                {/* Continuum Synchronization Matrix Indicators */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: matrix.antiquity ? 1 : 0.4 }}>
+                  <Sparkles size={14} color="#F5B942" />
+                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: matrix.antiquity ? '#F5B942' : 'var(--color-text-dim)' }}>
+                    Antiquity {matrix.antiquity ? '✓' : ''}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: matrix.quantum ? 1 : 0.4 }}>
+                  <Sparkles size={14} color="#00D9FF" />
+                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: matrix.quantum ? '#00D9FF' : 'var(--color-text-dim)' }}>
+                    Quantum {matrix.quantum ? '✓' : ''}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: matrix.singularity ? 1 : 0.4 }}>
+                  <Sparkles size={14} color="#C084FC" />
+                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: matrix.singularity ? '#C084FC' : 'var(--color-text-dim)' }}>
+                    Singularity {matrix.singularity ? '✓' : ''}
+                  </span>
+                </div>
+              </>
+            ) : isWorld3 ? (
               <>
                 {/* Chrono Beacon Badge */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: hasBeacon ? 1 : 0.4 }}>

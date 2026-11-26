@@ -21,6 +21,9 @@ class PlayerProgress extends Model
         'checkpoint_id',
         'checkpoint_position',
         'is_completed',
+        'ending_selected',
+        'campaign_completed',
+        'story_journal',
         'playtime_seconds',
     ];
 
@@ -29,8 +32,10 @@ class PlayerProgress extends Model
         return [
             'completed_objectives' => 'array',
             'inventory' => 'array',
+            'story_journal' => 'array',
             'checkpoint_position' => 'array',
             'is_completed' => 'boolean',
+            'campaign_completed' => 'boolean',
             'current_step' => 'integer',
             'playtime_seconds' => 'integer',
         ];

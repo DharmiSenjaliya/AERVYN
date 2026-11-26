@@ -5,12 +5,17 @@ import MobileControls from '../controls/MobileControls';
 import LostKingdomScene from '../scenes/LostKingdomScene';
 import BrokenPresentScene from '../scenes/BrokenPresentScene';
 import FracturedFutureScene from '../scenes/FracturedFutureScene';
+import LastTimelineScene from '../scenes/LastTimelineScene';
 import MainMenuScene from '../scenes/MainMenuScene';
 import GameHUD from '../ui/GameHUD';
 import PauseMenu from '../ui/PauseMenu';
 import VictoryScreen from '../ui/VictoryScreen';
 import GameOverScreen from '../ui/GameOverScreen';
 import IntroCinematic from '../ui/IntroCinematic';
+import DialogueOverlay from '../ui/DialogueOverlay';
+import StoryJournalModal from '../ui/StoryJournalModal';
+import FinalDecisionModal from '../ui/FinalDecisionModal';
+import CampaignEndingScreen from '../ui/CampaignEndingScreen';
 import SaveSystem from '../systems/SaveSystem';
 
 /**
@@ -25,6 +30,9 @@ export default function GameEngine() {
   const [mobileInput, setMobileInput] = useState({ x: 0, y: 0, jump: false, sprint: false });
   const [isMobile, setIsMobile] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
+  const [showFinalDecision, setShowFinalDecision] = useState(false);
+  const [showStoryJournal, setShowStoryJournal] = useState(false);
+  const [campaignEndingActive, setCampaignEndingActive] = useState(false);
 
   useEffect(() => {
     // 1. Detect touch device / viewport width
@@ -38,23 +46,42 @@ export default function GameEngine() {
     // 2. Initialize desktop keyboard/mouse listeners
     DesktopControls.init();
 
-    // 3. Subscribe to GameState changes
+    // 3. Campaign Events Listeners
+    const handleOpenDecision = () => setShowFinalDecision(true);
+    const handleToggleJournal = () => setShowStoryJournal((prev) => !prev);
+    const handleKeyDown = (e) => {
+      if ((e.key === 'j' || e.key === 'J') && !e.ctrlKey && !e.metaKey) {
+        setShowStoryJournal((prev) => !prev);
+      }
+    };
+
+    window.addEventListener('OPEN_FINAL_DECISION_MODAL', handleOpenDecision);
+    window.addEventListener('aervyn:toggle-journal', handleToggleJournal);
+    window.addEventListener('keydown', handleKeyDown);
+
+    // 4. Subscribe to GameState changes
     const unsub = GameState.subscribe((state) => {
       setCurrentScene(state.currentScene);
       setWorldId(state.worldId);
       setDamageFlash(state.damageFlash);
+      if (state.campaignCompleted && state.endingSelected && !campaignEndingActive) {
+        setCampaignEndingActive(true);
+      }
     });
 
-    // 4. Start automatic telemetry save system (every 25 seconds)
+    // 5. Start automatic telemetry save system (every 25 seconds)
     SaveSystem.startAutoSave(25000);
 
     return () => {
       window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('OPEN_FINAL_DECISION_MODAL', handleOpenDecision);
+      window.removeEventListener('aervyn:toggle-journal', handleToggleJournal);
+      window.removeEventListener('keydown', handleKeyDown);
       DesktopControls.destroy();
       SaveSystem.stopAutoSave();
       unsub();
     };
-  }, []);
+  }, [campaignEndingActive]);
 
   // Handle Mobile Controls Callbacks
   const handleMobileMove = (vec) => {
@@ -124,7 +151,9 @@ export default function GameEngine() {
       {(currentScene === 'playing' || currentScene === 'paused' || currentScene === 'victory' || currentScene === 'gameover') && (
         <>
           {/* Active World 3D Canvas Scene */}
-          {worldId === 'world_3' ? (
+          {worldId === 'world_final' ? (
+            <LastTimelineScene mobileInput={mobileInput} />
+          ) : worldId === 'world_3' ? (
             <FracturedFutureScene mobileInput={mobileInput} />
           ) : worldId === 'world_2' ? (
             <BrokenPresentScene mobileInput={mobileInput} />
@@ -137,6 +166,38 @@ export default function GameEngine() {
             <IntroCinematic
               worldId={worldId}
               onComplete={() => setShowIntro(false)}
+            />
+          )}
+
+          {/* Interactive Dialogue System Overlay */}
+          <DialogueOverlay />
+
+          {/* Story Journal Modal [J] */}
+          <StoryJournalModal
+            isOpen={showStoryJournal}
+            onClose={() => setShowStoryJournal(false)}
+          />
+
+          {/* Final Decision Modal at Zero Horizon */}
+          <FinalDecisionModal
+            isOpen={showFinalDecision}
+            onClose={() => setShowFinalDecision(false)}
+            onCompleteEnding={() => {
+              setCampaignEndingActive(true);
+            }}
+          />
+
+          {/* Campaign Grand Finale & Ending Screen */}
+          {campaignEndingActive && (
+            <CampaignEndingScreen
+              endingKey={GameState.getState().endingSelected || 'ending_a'}
+              onReplay={(targetWorld) => {
+                setCampaignEndingActive(false);
+                if (targetWorld) {
+                  GameState.setWorld(targetWorld);
+                }
+                GameState.setScene('menu');
+              }}
             />
           )}
 

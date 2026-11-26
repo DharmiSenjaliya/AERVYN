@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Game Engine State & Progress Persistence
     Route::prefix('game')->group(function () {
         Route::get('/state', [GameController::class, 'getState']);
+        Route::get('/campaign-summary', [GameController::class, 'getCampaignSummary']);
         Route::post('/save', [GameController::class, 'saveProgress']);
         Route::post('/checkpoint', [GameController::class, 'reachCheckpoint']);
         Route::post('/complete-world', [GameController::class, 'completeWorld']);

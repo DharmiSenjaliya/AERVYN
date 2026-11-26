@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, RotateCcw, Sliders, Home, Compass } from 'lucide-react';
+import { Play, RotateCcw, Sliders, Home, Compass, BookOpen } from 'lucide-react';
 import Logo from '../../components/common/Logo';
 import Button from '../../components/common/Button';
 import GameState from '../engine/GameState';
@@ -93,6 +93,19 @@ export default function PauseMenu({ onResume = () => {}, onExitToMenu = () => {}
               onClick={handleRestartCheckpoint}
             >
               Restart from Checkpoint
+            </Button>
+
+            <Button
+              variant="gold"
+              fullWidth
+              size="md"
+              icon={BookOpen}
+              onClick={() => {
+                AudioSystem.playInteract();
+                window.dispatchEvent(new CustomEvent('aervyn:toggle-journal'));
+              }}
+            >
+              Story Journal [J]
             </Button>
 
             <Button

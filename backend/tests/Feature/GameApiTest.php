@@ -100,4 +100,58 @@ class GameApiTest extends TestCase
             ->assertJsonPath('xp_awarded', 1000)
             ->assertJsonPath('progress.is_completed', true);
     }
+
+    public function test_authenticated_player_can_complete_final_chapter()
+    {
+        $user = User::where('email', 'player@aervyn.local')->first();
+
+        // Save progress at final decision
+        $this->actingAs($user, 'sanctum')
+            ->postJson('/api/game/save', [
+                'world_id' => 'world_final',
+                'current_step' => 3,
+                'ending_selected' => 'ending_a',
+                'story_journal' => ['lore_origin', 'lore_chronarch_fall', 'lore_primordial_core'],
+            ]);
+
+        // Complete Final Chapter with Ending A
+        $response = $this->actingAs($user, 'sanctum')
+            ->postJson('/api/game/complete-world', [
+                'world_id' => 'world_final',
+                'ending_selected' => 'ending_a',
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('xp_awarded', 1500)
+            ->assertJsonPath('progress.is_completed', true)
+            ->assertJsonPath('progress.campaign_completed', true)
+            ->assertJsonPath('progress.ending_selected', 'ending_a');
+    }
+
+    public function test_authenticated_player_can_get_campaign_summary()
+    {
+        $user = User::where('email', 'player@aervyn.local')->first();
+
+        $response = $this->actingAs($user, 'sanctum')
+            ->getJson('/api/game/campaign-summary');
+
+        $response->assertStatus(200)
+            ->assertJsonPath('status', 'success')
+            ->assertJsonStructure([
+                'status',
+                'summary' => [
+                    'user',
+                    'worlds_completed',
+                    'total_worlds',
+                    'total_playtime_seconds',
+                    'total_playtime_formatted',
+                    'ending_selected',
+                    'campaign_completed',
+                    'completion_percentage',
+                    'story_journal_count',
+                    'story_journal',
+                ]
+            ]);
+    }
 }

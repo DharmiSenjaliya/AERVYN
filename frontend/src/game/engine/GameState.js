@@ -81,6 +81,26 @@ class GameStateManager {
             7: 'Mission 7: The Fractured Future — Restore the Master Timeline Engine to seal the cosmic fracture!'
           }
         }
+      },
+      world_final: {
+        id: 'world_final',
+        name: 'World 4: The Last Timeline',
+        spawn: [0, 2, 20],
+        checkpoint: { id: 'zero_horizon_arrival', name: 'Zero Horizon Sanctum', position: [0, 2, 20] },
+        mission: {
+          id: 'mission_final',
+          title: 'The Last Timeline',
+          currentStep: 1,
+          totalSteps: 4,
+          currentObjective: 'Step 1: The Zero Horizon — Cross the celestial bridge toward the Primordial Chrono Core.',
+          completedObjectives: [],
+          stepDescriptions: {
+            1: 'Step 1: The Zero Horizon — Cross the celestial bridge toward the Primordial Chrono Core.',
+            2: 'Step 2: Continuum Synchronization — Align the 3 Epoch Keystones (Antiquity, Quantum, Singularity) [E].',
+            3: 'Step 3: The Nexus Decision — Harmonize the Primordial Core and choose the fate of reality [E].',
+            4: 'Step 4: Epilogue — Witness the destiny of Aervyn.'
+          }
+        }
       }
     };
 
@@ -149,8 +169,26 @@ class GameStateManager {
         archiveTerminalAccessed: false,
         bossArenaUnlocked: false,
         bossDefeated: false,
-        timelineEngineRestored: false
+        timelineEngineRestored: false,
+
+        // World Final (The Last Timeline)
+        synchronizationMatrix: {
+          antiquity: false,
+          quantum: false,
+          singularity: false,
+          solved: false
+        },
+        primordialCoreStabilized: false
       },
+
+      endingSelected: null,
+      campaignCompleted: false,
+      storyJournal: [
+        'prologue_origin',
+        'lore_time_energy',
+        'lore_ancient_kingdom'
+      ],
+      activeDialogue: null,
 
       checkpoint: { ...cfg.checkpoint },
       interactionPrompt: null,
@@ -410,6 +448,89 @@ class GameStateManager {
     });
   }
 
+  // World 4: Continuum Synchronization Matrix Keystone Alignment
+  alignEpochKeystone(epochKey) {
+    if (!['antiquity', 'quantum', 'singularity'].includes(epochKey)) return;
+
+    const currentMatrix = this.state.objects.synchronizationMatrix || {};
+    if (currentMatrix[epochKey]) return; // Already aligned
+
+    const updated = {
+      ...currentMatrix,
+      [epochKey]: true
+    };
+    const allSolved = updated.antiquity && updated.quantum && updated.singularity;
+    updated.solved = allSolved;
+
+    this.setState({
+      objects: {
+        ...this.state.objects,
+        synchronizationMatrix: updated
+      }
+    });
+
+    // Journal Unlock based on Keystone
+    const journalMap = {
+      antiquity: 'artifact_antiquity_keystone',
+      quantum: 'artifact_quantum_flux',
+      singularity: 'artifact_singularity_shard'
+    };
+    if (journalMap[epochKey]) {
+      this.unlockJournalEntry(journalMap[epochKey]);
+    }
+
+    if (allSolved) {
+      AudioSystem.playMatrixComplete();
+      this.unlockJournalEntry('lore_primordial_core');
+      this.advanceStep(3);
+    } else {
+      AudioSystem.playMatrixAlign();
+    }
+  }
+
+  // World 4: Choose Temporal Ending (Ending A or Ending B)
+  setEnding(endingKey) {
+    if (!['ending_a', 'ending_b'].includes(endingKey)) return;
+
+    AudioSystem.playEndingDecision();
+    this.unlockJournalEntry(`destiny_${endingKey}`);
+
+    this.setState({
+      endingSelected: endingKey,
+      campaignCompleted: true,
+      objects: {
+        ...this.state.objects,
+        primordialCoreStabilized: true
+      }
+    });
+
+    this.advanceStep(4);
+  }
+
+  // Story Journal System
+  unlockJournalEntry(entryId) {
+    if (!entryId) return;
+    const current = this.state.storyJournal || [];
+    if (!current.includes(entryId)) {
+      this.setState({
+        storyJournal: [...current, entryId]
+      });
+    }
+  }
+
+  // Cinematic Dialogue System
+  startDialogue(dialogue) {
+    this.setState({
+      activeDialogue: dialogue
+    });
+  }
+
+  closeDialogue() {
+    this.setState({
+      activeDialogue: null
+    });
+  }
+
   setScene(scene) {
     this.setState({ currentScene: scene });
   }
@@ -465,8 +586,13 @@ class GameStateManager {
         archiveTerminalAccessed: false,
         bossArenaUnlocked: false,
         bossDefeated: false,
-        timelineEngineRestored: false
+        timelineEngineRestored: false,
+        synchronizationMatrix: { antiquity: false, quantum: false, singularity: false, solved: false },
+        primordialCoreStabilized: false
       },
+      endingSelected: null,
+      campaignCompleted: false,
+      activeDialogue: null,
       interactionPrompt: null
     });
   }

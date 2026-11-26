@@ -11,12 +11,15 @@ import {
   ArrowLeft,
   Volume2,
   VolumeX,
-  Sparkles
+  Sparkles,
+  BookOpen,
+  HelpCircle
 } from 'lucide-react';
 import Logo from '../../components/common/Logo';
 import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import GameSettings from '../ui/GameSettings';
+import StoryJournalModal from '../ui/StoryJournalModal';
 import GameState from '../engine/GameState';
 import AudioSystem from '../systems/AudioSystem';
 import SaveSystem from '../systems/SaveSystem';
@@ -28,6 +31,7 @@ import SaveSystem from '../systems/SaveSystem';
 export default function MainMenuScene({ onStartGame = () => {}, onContinueGame = () => {} }) {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(null); // 'worlds' | 'missions' | 'achievements' | 'settings' | 'credits'
+  const [showJournal, setShowJournal] = useState(false);
   const [missionWorldTab, setMissionWorldTab] = useState('world_1');
   const [muted, setMuted] = useState(false);
 
@@ -170,6 +174,16 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
           </Button>
 
           <Button
+            variant="gold"
+            fullWidth
+            size="sm"
+            icon={BookOpen}
+            onClick={() => { AudioSystem.playInteract(); setShowJournal(true); }}
+          >
+            Story Journal
+          </Button>
+
+          <Button
             variant="secondary"
             fullWidth
             size="sm"
@@ -306,11 +320,35 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
             </div>
           </div>
 
-          {/* World 4 Card (Locked) */}
-          <div style={{ padding: '0.85rem 1rem', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', opacity: 0.55 }}>
+          {/* World 4 Card (The Last Timeline) */}
+          <div
+            style={{
+              padding: '1rem',
+              background: 'rgba(56, 189, 248, 0.14)',
+              border: '1px solid var(--border-cyan)',
+              borderRadius: 'var(--radius-sm)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.4rem'
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '0.88rem' }}>World 4: The Forgotten Timeline</span>
-              <span style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)' }}>LOCKED &bull; ZERO HORIZON</span>
+              <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#FFFFFF' }}>World 4: The Last Timeline</div>
+              <span style={{ fontSize: '0.72rem', color: '#38BDF8', fontWeight: 700 }}>THE ZERO HORIZON</span>
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', margin: 0, lineHeight: 1.4 }}>
+              Celestial singularity nexus outside time. Solve the Continuum Synchronization Matrix, commune with the Primordial Core, and choose the destiny of reality.
+            </p>
+            <div style={{ marginTop: '0.4rem' }}>
+              <Button
+                variant="cyan"
+                size="sm"
+                fullWidth
+                icon={Play}
+                onClick={() => handleSelectWorld('world_final')}
+              >
+                Launch World 4 (Zero Horizon)
+              </Button>
             </div>
           </div>
         </div>
@@ -374,6 +412,22 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
             >
               World 3: Future (7)
             </button>
+            <button
+              onClick={() => setMissionWorldTab('world_final')}
+              style={{
+                flex: 1,
+                padding: '0.45rem',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                borderRadius: 'var(--radius-xs)',
+                border: missionWorldTab === 'world_final' ? '1px solid #38BDF8' : '1px solid var(--border-subtle)',
+                background: missionWorldTab === 'world_final' ? 'rgba(56, 189, 248, 0.2)' : 'rgba(255, 255, 255, 0.03)',
+                color: missionWorldTab === 'world_final' ? '#FFFFFF' : 'var(--color-text-dim)',
+                cursor: 'pointer'
+              }}
+            >
+              World 4: Final (4)
+            </button>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '320px', overflowY: 'auto' }}>
@@ -408,7 +462,7 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
                   {m}
                 </div>
               ))
-            ) : (
+            ) : missionWorldTab === 'world_3' ? (
               [
                 '1. Arrival at the End of Time — Calibrate the Chrono Beacon',
                 '2. The Fallen Sky City — Activate the solid-light Phase Bridge',
@@ -419,6 +473,17 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
                 '7. The Fractured Future — Restore the Master Timeline Engine & save the universe'
               ].map((m, i) => (
                 <div key={i} style={{ padding: '0.5rem 0.75rem', background: 'rgba(245, 185, 66, 0.08)', borderLeft: '3px solid var(--color-gold)', borderRadius: 'var(--radius-xs)', fontSize: '0.82rem', color: '#FFFFFF' }}>
+                  {m}
+                </div>
+              ))
+            ) : (
+              [
+                '1. The Zero Horizon — Cross the celestial bridge toward the Primordial Core',
+                '2. Continuum Synchronization — Harmonize the 3 Epoch Keystones (Antiquity, Quantum, Singularity)',
+                '3. The Nexus Decision — Commune with the Primordial Core and determine the fate of reality',
+                '4. Epilogue — Witness the destiny of Aervyn (The Eternal Guardian vs The Architect of Tomorrow)'
+              ].map((m, i) => (
+                <div key={i} style={{ padding: '0.5rem 0.75rem', background: 'rgba(56, 189, 248, 0.08)', borderLeft: '3px solid #38BDF8', borderRadius: 'var(--radius-xs)', fontSize: '0.82rem', color: '#FFFFFF' }}>
                   {m}
                 </div>
               ))
@@ -517,6 +582,23 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
               <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Defeat the Chronarch & restore the Master Timeline Engine. (+1000 XP)</div>
             </div>
           </div>
+
+          {/* World 4 Achievements */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(56, 189, 248, 0.1)', border: '1px solid #38BDF8', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#38BDF8" />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Continuum Master</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Harmonize all 3 Epoch Keystones in the Synchronization Matrix. (+500 XP)</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(245, 185, 66, 0.12)', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#F5B942" />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>The Eternal Guardian / Architect</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Complete the Grand Story Campaign & determine reality’s fate. (+1500 XP)</div>
+            </div>
+          </div>
         </div>
       </Modal>
 
@@ -550,6 +632,12 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
           </div>
         </div>
       </Modal>
+
+      {/* Story Journal Modal */}
+      <StoryJournalModal
+        isOpen={showJournal}
+        onClose={() => setShowJournal(false)}
+      />
     </div>
   );
 }
