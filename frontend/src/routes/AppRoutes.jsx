@@ -9,9 +9,14 @@ import GameLayout from '../layouts/GameLayout';
 
 // Public & Auth Pages
 import LandingPage from '../pages/public/LandingPage';
+import ProductInfoPage from '../pages/public/ProductInfoPage';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import AdminLoginPage from '../pages/auth/AdminLoginPage';
+
+// Commercial Buyer Demo Mode
+import BuyerDemoPage from '../pages/demo/BuyerDemoPage';
+import DemoCompletionPage from '../pages/demo/DemoCompletionPage';
 
 // Player Pages
 import DashboardPage from '../pages/player/DashboardPage';
@@ -45,6 +50,7 @@ import ActivityLogsPage from '../pages/admin/ActivityLogsPage';
 import AdminSettingsPage from '../pages/admin/AdminSettingsPage';
 import MediaManagementPage from '../pages/admin/MediaManagementPage';
 import AdminSocialPage from '../pages/admin/AdminSocialPage';
+import AdminInquiriesPage from '../pages/admin/AdminInquiriesPage';
 
 // 3D Game Engine View
 import GameView from '../pages/game/GameView';
@@ -77,11 +83,16 @@ export default function AppRoutes() {
       {/* 1. Public Website & Story Pages */}
       <Route element={<PublicLayout />}>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/product" element={<ProductInfoPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Route>
 
-      {/* 2. Standalone Admin Login */}
+      {/* 2. Standalone Commercial Buyer Demo & Completion Screen */}
+      <Route path="/demo" element={<BuyerDemoPage />} />
+      <Route path="/demo/complete" element={<DemoCompletionPage />} />
+
+      {/* 3. Standalone Admin Login */}
       <Route path="/admin/login" element={<AdminLoginPage />} />
 
       {/* 3. Player Dashboard Portal */}
@@ -154,6 +165,7 @@ export default function AppRoutes() {
         <Route path="notifications" element={<FeedbackManagementPage />} />
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="reports" element={<AnalyticsPage />} />
+        <Route path="inquiries" element={<AdminInquiriesPage />} />
         <Route path="users" element={<AdminUsersPage />} />
         <Route path="roles" element={<ActivityLogsPage />} />
         <Route path="activity-logs" element={<ActivityLogsPage />} />

@@ -227,3 +227,40 @@ All endpoints require `Authorization: Bearer <admin_token>` and pass through `ad
 | `PUT` | `/admin/social/reports/{id}` | Update report status (`reviewing`, `resolved`, `rejected`) and add notes |
 | `GET` | `/admin/social/challenges` | Challenge monitor across all players |
 | `POST` | `/admin/social/users/{id}/suspend` | Toggle social suspension without banning campaign access |
+
+---
+
+## 6. Commercial & Buyer Inquiry Endpoints
+
+### Public Submission
+| Method | Path | Description | Access | Rate Limit |
+|---|---|---|---|---|
+| `POST` | `/inquiries` | Submit prospective buyer inquiry (name, email, company, country, type, message) | Public | 5 req/min (`throttle:auth`) |
+
+#### Request Payload:
+```json
+{
+  "name": "Jane Doe",
+  "email": "jane@acme.com",
+  "company": "Acme Interactive",
+  "country": "United States",
+  "inquiry_type": "game_purchase",
+  "message": "Interested in full commercial source code buyout for Q1 2027 launch."
+}
+```
+
+### Administrative Inquiries Triage
+All endpoints require `Authorization: Bearer <admin_token>` and pass through `admin` middleware:
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/admin/inquiries` | List all inquiries with KPI counts (total, new, contacted, qualified, closed) |
+| `PUT` | `/admin/inquiries/{id}` | Update inquiry pipeline status and append internal negotiation notes |
+
+#### Triage Payload:
+```json
+{
+  "status": "contacted",
+  "admin_notes": "Initial response email sent. Intro meeting scheduled for Tuesday."
+}
+```

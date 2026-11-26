@@ -71,3 +71,12 @@
   - Record internal investigative verdict notes.
 - **Social Suspension Tool:**
   - Temporarily suspend a disruptive player's social permissions (disabling challenges and friend requests) without terminating their offline campaign save progress.
+
+### 10. Commercial Inquiries & Buyer Pipeline (`/admin/inquiries`)
+- **Overview Metrics:**
+  - Total inquiries, new leads, active discussions, qualified buyers, closed deals.
+- **Pipeline Triage:**
+  - Review prospect full name, business email, company name, country, and inquiry type (`game_purchase`, `b2b_licensing`, `customization`, `reskin`, `technical_inquiry`, `partnership`, `other`).
+  - Read prospect requirements message and review submission timestamp.
+  - Update inquiry pipeline status (`new`, `contacted`, `qualified`, `closed`).
+  - Log internal CRM negotiation notes, terms agreed, and follow-up milestones.

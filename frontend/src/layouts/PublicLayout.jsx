@@ -19,11 +19,12 @@ export default function PublicLayout() {
 
   const navLinks = [
     { label: 'Home', path: '/' },
-    { label: 'Story', path: '/#story' },
     { label: 'Worlds', path: '/#worlds' },
     { label: 'Features', path: '/#features' },
-    { label: 'Characters', path: '/#characters' },
-    { label: 'System Specs', path: '/#specs' },
+    { label: 'Specs', path: '/#specs' },
+    { label: 'Product Info', path: '/product' },
+    { label: 'Demo', path: '/demo' },
+    { label: 'Inquiries', path: '/#inquiry' },
   ];
 
   const handleNavClick = () => {

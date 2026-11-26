@@ -5,6 +5,31 @@ Welcome to the official technical and operational documentation repository for *
 
 ---
 
+### Commercial & Buyer Documentation Suite
+
+12. [COMMERCIAL PRODUCT OVERVIEW](PRODUCT_OVERVIEW.md)
+    - Executive summary, turnkey licensing options, target runtime, game scope, and commercial deliverable inventory.
+
+13. [BUYER FEATURE LIST & DELIVERABLES INVENTORY](BUYER_FEATURE_LIST.md)
+    - Comprehensive inventory of 3D engine capabilities, 4 worlds, audio synthesis, gamification, social layer, and admin features.
+
+14. [BUYER DEMO GUIDE & EVALUATION WORKFLOW](DEMO_GUIDE.md)
+    - Step-by-step evaluation guide for the isolated `/demo` slice and `/demo/complete` screen.
+
+15. [INSTALLATION & SETUP GUIDE](INSTALLATION_GUIDE.md)
+    - Step-by-step instructions for local setup, Laravel configuration, database migrations, Vite compilation, and Nginx production setup.
+
+16. [TECHNOLOGY STACK & ARCHITECTURE](TECH_STACK.md)
+    - Detailed architecture diagrams and library breakdown for React 19, Three.js, Laravel 12, MySQL, and Web Audio.
+
+17. [SYSTEM REQUIREMENTS & COMPATIBILITY](SYSTEM_REQUIREMENTS.md)
+    - Realistic minimum vs recommended client hardware and production server hosting specifications.
+
+18. [RELEASE NOTES & VERSION HISTORY](RELEASE_NOTES.md)
+    - Master commercial release notes for Version 1.0.0.
+
+---
+
 ### Core Documentation Index
 
 1. [GAME DESIGN DOCUMENT (GDD)](GAME_DESIGN_DOCUMENT.md)

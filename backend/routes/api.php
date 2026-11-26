@@ -31,6 +31,8 @@ use App\Http\Controllers\Social\SocialPrivacyController;
 use App\Http\Controllers\Social\SocialReportController;
 use App\Http\Controllers\Social\SocialLeaderboardController;
 use App\Http\Controllers\Admin\AdminSocialController;
+use App\Http\Controllers\BuyerInquiryController;
+use App\Http\Controllers\Admin\AdminInquiryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +46,7 @@ Route::prefix('auth')->middleware('throttle:auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 Route::post('/feedback', [AdminFeedbackController::class, 'store'])->middleware('throttle:auth');
+Route::post('/inquiries', [BuyerInquiryController::class, 'store'])->middleware('throttle:auth');
 
 // Authenticated Routes (Sanctum Guard)
 Route::middleware('auth:sanctum')->group(function () {
@@ -180,5 +183,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/social/reports/{id}', [AdminSocialController::class, 'updateReport']);
         Route::get('/social/challenges', [AdminSocialController::class, 'challenges']);
         Route::post('/social/users/{userId}/suspend', [AdminSocialController::class, 'toggleSuspension']);
+
+        // 14. Buyer Inquiries & Commercial Licensing
+        Route::get('/inquiries', [AdminInquiryController::class, 'index']);
+        Route::put('/inquiries/{id}', [AdminInquiryController::class, 'update']);
     });
 });

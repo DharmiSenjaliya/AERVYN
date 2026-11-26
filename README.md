@@ -4,14 +4,14 @@
   # AERVYN: ECHOES OF TIME
   ### Official Commercial 3D Adventure & Time Travel Game Product
 
-  **Version 1.0.0 — Production Release Master**
+  **Version 1.0.0 — Commercial Master Release**
 
-  [![PHPUnit Tests](https://img.shields.io/badge/PHPUnit-50%2F50%20Passing%20(957%20assertions)-brightgreen.svg)]()
-  [![Vite Build](https://img.shields.io/badge/Vite%20Build-0%20Errors%20(1.20s)-cyan.svg)]()
+  [![PHPUnit Tests](https://img.shields.io/badge/PHPUnit-54%2F54%20Passing%20(1037%20assertions)-brightgreen.svg)]()
+  [![Vite Build](https://img.shields.io/badge/Vite%20Build-0%20Errors%20(1.18s)-cyan.svg)]()
   [![Laravel](https://img.shields.io/badge/Laravel-12.x-red.svg)]()
   [![React](https://img.shields.io/badge/React-19.x-blue.svg)]()
   [![Three.js](https://img.shields.io/badge/Three.js-R187-black.svg)]()
-  [![Commercial License](https://img.shields.io/badge/Commercial%20Status-Cleared%20for%20Sale-gold.svg)]()
+  [![Commercial License](https://img.shields.io/badge/Commercial%20Status-Turnkey%20Cleared%20for%20Buyout-gold.svg)]()
 </div>
 
 ---
@@ -20,11 +20,13 @@
 
 **AERVYN: ECHOES OF TIME** is an original, commercially sellable 3D adventure game combining deep atmospheric exploration, environmental puzzle solving, time-travel mechanics, and multi-timeline narrative progression.
 
-Built on a unified **React 19 + Three.js (React Three Fiber) + Laravel 12** architecture, *AERVYN* delivers a complete, cohesive experience containing:
+Built on a unified **React 19 + Three.js (React Three Fiber) + Laravel 12** architecture, *AERVYN* delivers a complete, cohesive commercial package containing:
+- A public **Commercial Showcase & Landing Page** (`/`) featuring 4-world previews, features grid, deliverables inventory, system requirements, and an interactive commercial inquiry form.
+- An isolated **Buyer Demo Mode** (`/demo`) and **Demo Completion Screen** (`/demo/complete`) allowing prospective buyers to evaluate gameplay responsiveness, mechanics, and WebGL rendering in under 3 minutes without polluting production player databases.
 - A fully playable **Single-Player Story Campaign** spanning 4 distinct temporal worlds and Dual Narrative Endings that functions independently offline from a gameplay flow perspective.
 - A premium **Player Gaming Dashboard** with level progression, XP gauges, achievements, inventory tracking, and personal lore journals.
 - An optional **Asynchronous Social Layer** with player search, friends rosters, operative blocking, activity feeds, and verifiable challenge duels.
-- A modern **13-Module Administrative Suite** with real-time studio KPIs, player management, world content editing, feedback triage, and social moderation.
+- An enterprise **23-Module Administrative Suite** with real-time studio KPIs, player management, world content editing, feedback triage, social moderation, and buyer inquiry CRM triage.
 
 ---
 
@@ -186,9 +188,16 @@ npm run build
 
 ## 7. Master Documentation Suite
 
-Comprehensive technical, design, and operational manuals are available in the [`DOCUMENTATION/`](DOCUMENTATION/) directory:
+Comprehensive technical, design, commercial, and operational manuals are available in the [`DOCUMENTATION/`](DOCUMENTATION/) directory:
 
 - [README.md](DOCUMENTATION/README.md) — Documentation index and quick links
+- [PRODUCT_OVERVIEW.md](DOCUMENTATION/PRODUCT_OVERVIEW.md) — Executive commercial summary, runtime scope, and licensing options
+- [BUYER_FEATURE_LIST.md](DOCUMENTATION/BUYER_FEATURE_LIST.md) — Detailed feature inventory and deliverables checklist
+- [DEMO_GUIDE.md](DOCUMENTATION/DEMO_GUIDE.md) — Step-by-step buyer demo evaluation guide
+- [INSTALLATION_GUIDE.md](DOCUMENTATION/INSTALLATION_GUIDE.md) — Complete local and server deployment instructions
+- [TECH_STACK.md](DOCUMENTATION/TECH_STACK.md) — Architectural diagrams and library specifications
+- [SYSTEM_REQUIREMENTS.md](DOCUMENTATION/SYSTEM_REQUIREMENTS.md) — Minimum and recommended hardware and server requirements
+- [RELEASE_NOTES.md](DOCUMENTATION/RELEASE_NOTES.md) — Release notes for Commercial Version 1.0.0
 - [GAME_DESIGN_DOCUMENT.md](DOCUMENTATION/GAME_DESIGN_DOCUMENT.md) — Full narrative, mechanics, and puzzle design document
 - [TECHNICAL_DOCUMENTATION.md](DOCUMENTATION/TECHNICAL_DOCUMENTATION.md) — Architecture, R3F engine, Web Audio, and security manual
 - [API_DOCUMENTATION.md](DOCUMENTATION/API_DOCUMENTATION.md) — REST API specification with request/response schemas
