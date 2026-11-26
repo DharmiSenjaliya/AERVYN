@@ -51,6 +51,7 @@ import AdminSettingsPage from '../pages/admin/AdminSettingsPage';
 import MediaManagementPage from '../pages/admin/MediaManagementPage';
 import AdminSocialPage from '../pages/admin/AdminSocialPage';
 import AdminInquiriesPage from '../pages/admin/AdminInquiriesPage';
+import AdminBrandingPage from '../pages/admin/AdminBrandingPage';
 
 // 3D Game Engine View
 import GameView from '../pages/game/GameView';
@@ -166,6 +167,8 @@ export default function AppRoutes() {
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="reports" element={<AnalyticsPage />} />
         <Route path="inquiries" element={<AdminInquiriesPage />} />
+        <Route path="branding" element={<AdminBrandingPage />} />
+        <Route path="product-settings" element={<AdminBrandingPage />} />
         <Route path="users" element={<AdminUsersPage />} />
         <Route path="roles" element={<ActivityLogsPage />} />
         <Route path="activity-logs" element={<ActivityLogsPage />} />

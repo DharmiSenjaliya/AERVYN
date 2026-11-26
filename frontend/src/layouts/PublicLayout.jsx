@@ -5,6 +5,7 @@ import Logo from '../components/common/Logo';
 import Button from '../components/common/Button';
 import { useAudio } from '../context/AudioContext';
 import { useAuth } from '../context/AuthContext';
+import { useBranding } from '../context/BrandingContext';
 
 /**
  * Public Website Layout
@@ -15,6 +16,7 @@ export default function PublicLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { muted, toggleMute, playClick } = useAudio();
   const { user, isAuthenticated } = useAuth();
+  const { branding } = useBranding();
   const location = useLocation();
 
   const navLinks = [
@@ -320,8 +322,8 @@ export default function PublicLayout() {
               color: 'var(--color-text-dim)'
             }}
           >
-            <span>&copy; {new Date().getFullYear()} AERVYN: Echoes of Time. All rights reserved.</span>
-            <span>Commercial Indie Game Product &bull; Original Brand Identity</span>
+            <span>{branding?.white_label_enabled && branding?.footer_text ? branding.footer_text : `© ${new Date().getFullYear()} AERVYN: Echoes of Time. All rights reserved.`}</span>
+            <span>{branding?.white_label_enabled && branding?.company_name ? branding.company_name : 'Commercial Indie Game Product • Original Brand Identity'}</span>
           </div>
         </div>
       </footer>

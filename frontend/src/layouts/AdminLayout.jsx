@@ -31,7 +31,8 @@ import {
   Search,
   ExternalLink,
   ShieldAlert,
-  Mail
+  Mail,
+  Palette
 } from 'lucide-react';
 import Logo from '../components/common/Logo';
 import Badge from '../components/common/Badge';
@@ -72,6 +73,7 @@ export default function AdminLayout() {
     { label: 'Reports & CSV', path: '/admin/reports', icon: FileSpreadsheet },
     { label: 'Admin Accounts', path: '/admin/users', icon: ShieldCheck },
     { label: 'Activity Logs', path: '/admin/activity-logs', icon: Key },
+    { label: 'Product & Branding', path: '/admin/branding', icon: Palette },
     { label: 'Game Settings', path: '/admin/game-settings', icon: Sliders },
     { label: 'System Settings', path: '/admin/settings', icon: Settings },
     { label: 'Profile', path: '/admin/profile', icon: User },

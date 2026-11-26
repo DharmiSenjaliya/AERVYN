@@ -129,6 +129,50 @@ Staff moderation queue.
 - `admin_notes` (TEXT, NULLABLE)
 - `resolved_by` (BIGINT, FK -> `users.id`, NULLABLE)
 
+### 9. `buyer_inquiries`
+Commercial lead capture and B2B inquiry pipeline.
+- `id` (BIGINT, PK, AUTO_INCREMENT)
+- `name` (VARCHAR 255) — Prospect name
+- `email` (VARCHAR 255) — Business email
+- `company` (VARCHAR 255, NULLABLE) — Organization / studio
+- `country` (VARCHAR 100, NULLABLE) — Geographic location
+- `inquiry_type` (VARCHAR 100) — `game_purchase`, `b2b_licensing`, `customization`, `reskin`, `technical_inquiry`, `partnership`, `other`
+- `message` (TEXT) — Buyer requirements / questions
+- `status` (VARCHAR 50) — `new`, `contacted`, `qualified`, `closed` (default: `'new'`)
+- `admin_notes` (TEXT, NULLABLE) — Internal CRM follow-up logs
+- `ip_address` (VARCHAR 45, NULLABLE) — Rate-limiting audit telemetry
+- `created_at`, `updated_at` (TIMESTAMP)
+
+### 10. `game_settings`
+Dynamic configuration, white-label branding, and feature flags.
+- `key` (VARCHAR 191, PK) — Config key (e.g. `white_label_enabled`, `app_name`, `feature_social`)
+- `value` (TEXT, NULLABLE) — Setting string or JSON value
+- `description` (VARCHAR 255, NULLABLE)
+- `category` (VARCHAR 50) — `branding`, `features`, `maintenance`, `general`, `gameplay`
+- `created_at`, `updated_at` (TIMESTAMP)
+
+---
+
+## 3. Database Initialization & Buyer Setup
+To create the database from scratch on a clean MySQL server:
+
+```sql
+-- 1. Create database with UTF8MB4 encoding
+CREATE DATABASE aervyn_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- 2. Create isolated database user (replace password with secure value)
+CREATE USER 'aervyn_user'@'localhost' IDENTIFIED BY 'YOUR_SECURE_PASSWORD';
+GRANT ALL PRIVILEGES ON aervyn_db.* TO 'aervyn_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+Then execute the migrations and master seeders:
+```bash
+cd backend
+php artisan migrate --force
+php artisan db:seed --force
+```
+
 ---
 
 ## 3. Query Optimization & Indexing

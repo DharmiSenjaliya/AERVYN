@@ -6,8 +6,8 @@
 
   **Version 1.0.0 — Commercial Master Release**
 
-  [![PHPUnit Tests](https://img.shields.io/badge/PHPUnit-54%2F54%20Passing%20(1037%20assertions)-brightgreen.svg)]()
-  [![Vite Build](https://img.shields.io/badge/Vite%20Build-0%20Errors%20(1.18s)-cyan.svg)]()
+  [![PHPUnit Tests](https://img.shields.io/badge/PHPUnit-59%2F59%20Passing%20(1161%20assertions)-brightgreen.svg)]()
+  [![Vite Build](https://img.shields.io/badge/Vite%20Build-0%20Errors%20(1.28s)-cyan.svg)]()
   [![Laravel](https://img.shields.io/badge/Laravel-12.x-red.svg)]()
   [![React](https://img.shields.io/badge/React-19.x-blue.svg)]()
   [![Three.js](https://img.shields.io/badge/Three.js-R187-black.svg)]()
@@ -23,6 +23,7 @@
 Built on a unified **React 19 + Three.js (React Three Fiber) + Laravel 12** architecture, *AERVYN* delivers a complete, cohesive commercial package containing:
 - A public **Commercial Showcase & Landing Page** (`/`) featuring 4-world previews, features grid, deliverables inventory, system requirements, and an interactive commercial inquiry form.
 - An isolated **Buyer Demo Mode** (`/demo`) and **Demo Completion Screen** (`/demo/complete`) allowing prospective buyers to evaluate gameplay responsiveness, mechanics, and WebGL rendering in under 3 minutes without polluting production player databases.
+- A controlled **White-Label & Reskin Architecture** with dedicated Admin UI (`/admin/branding`) supporting buyer branding, logo/favicon uploads, CSS theme colors, and safe reset to default AERVYN identity.
 - A fully playable **Single-Player Story Campaign** spanning 4 distinct temporal worlds and Dual Narrative Endings that functions independently offline from a gameplay flow perspective.
 - A premium **Player Gaming Dashboard** with level progression, XP gauges, achievements, inventory tracking, and personal lore journals.
 - An optional **Asynchronous Social Layer** with player search, friends rosters, operative blocking, activity feeds, and verifiable challenge duels.
@@ -170,7 +171,9 @@ npm run dev
 cd backend
 php artisan test
 ```
-**Results:** **50 of 50 Passed (957 Assertions)** in 4.92s:
+**Results:** **59 of 59 Passed (1,161 Assertions)** in ~32s:
+- `BrandingAndFeatureFlagsTest.php`: Public branding default protection, white-label activation, color customization, and reset-to-default verification.
+- `BuyerInquiryTest.php`: Public lead submission, rate limiting, and administrative CRM triage.
 - `UserJourneyE2ETest.php`: Complete End-to-End User Journey (Ending A, Ending B, checkpoint resume, anti-cheat validation).
 - `SocialApiTest.php`: Friends, requests, blocking, challenge arena, notifications, privacy, reports, admin moderation.
 - `AdminApiTest.php`: 12 comprehensive administrative permission, CRUD, and telemetry tests.
@@ -182,7 +185,7 @@ php artisan test
 cd frontend
 npm run build
 ```
-**Results:** **0 Errors, 0 Warnings** (2,882 modules transformed in 1.20s).
+**Results:** **0 Errors, 0 Warnings** (2,890 modules transformed in 1.28s).
 
 ---
 
@@ -190,25 +193,30 @@ npm run build
 
 Comprehensive technical, design, commercial, and operational manuals are available in the [`DOCUMENTATION/`](DOCUMENTATION/) directory:
 
-- [README.md](DOCUMENTATION/README.md) — Documentation index and quick links
-- [PRODUCT_OVERVIEW.md](DOCUMENTATION/PRODUCT_OVERVIEW.md) — Executive commercial summary, runtime scope, and licensing options
-- [BUYER_FEATURE_LIST.md](DOCUMENTATION/BUYER_FEATURE_LIST.md) — Detailed feature inventory and deliverables checklist
-- [DEMO_GUIDE.md](DOCUMENTATION/DEMO_GUIDE.md) — Step-by-step buyer demo evaluation guide
-- [INSTALLATION_GUIDE.md](DOCUMENTATION/INSTALLATION_GUIDE.md) — Complete local and server deployment instructions
-- [TECH_STACK.md](DOCUMENTATION/TECH_STACK.md) — Architectural diagrams and library specifications
-- [SYSTEM_REQUIREMENTS.md](DOCUMENTATION/SYSTEM_REQUIREMENTS.md) — Minimum and recommended hardware and server requirements
-- [RELEASE_NOTES.md](DOCUMENTATION/RELEASE_NOTES.md) — Release notes for Commercial Version 1.0.0
-- [GAME_DESIGN_DOCUMENT.md](DOCUMENTATION/GAME_DESIGN_DOCUMENT.md) — Full narrative, mechanics, and puzzle design document
-- [TECHNICAL_DOCUMENTATION.md](DOCUMENTATION/TECHNICAL_DOCUMENTATION.md) — Architecture, R3F engine, Web Audio, and security manual
-- [API_DOCUMENTATION.md](DOCUMENTATION/API_DOCUMENTATION.md) — REST API specification with request/response schemas
-- [DATABASE_DOCUMENTATION.md](DOCUMENTATION/DATABASE_DOCUMENTATION.md) — ER diagram, 18 tables, indexes, and cascades
+- [README.md](DOCUMENTATION/README.md) — Master documentation index
+- [COMMERCIAL_HANDOVER.md](DOCUMENTATION/COMMERCIAL_HANDOVER.md) — Technical transfer & handover manual
+- [BUYER_HANDOVER_CHECKLIST.md](DOCUMENTATION/BUYER_HANDOVER_CHECKLIST.md) — Handover acceptance checklist
+- [PRODUCT_OVERVIEW.md](DOCUMENTATION/PRODUCT_OVERVIEW.md) — Executive commercial summary & licensing scope
+- [BUYER_FEATURE_LIST.md](DOCUMENTATION/BUYER_FEATURE_LIST.md) — Detailed feature inventory & deliverables
+- [DEMO_GUIDE.md](DOCUMENTATION/DEMO_GUIDE.md) — Buyer demo evaluation guide
+- [INSTALLATION_GUIDE.md](DOCUMENTATION/INSTALLATION_GUIDE.md) — Windows & Linux installation from zero
+- [PRODUCTION_DEPLOYMENT_GUIDE.md](DOCUMENTATION/PRODUCTION_DEPLOYMENT_GUIDE.md) — Nginx, SSL, optimization, and security hardening
+- [BACKUP_RESTORE_GUIDE.md](DOCUMENTATION/BACKUP_RESTORE_GUIDE.md) — Database & media backup and disaster recovery
+- [MAINTENANCE_GUIDE.md](DOCUMENTATION/MAINTENANCE_GUIDE.md) — Routine maintenance, dependency updates, and rollback
+- [TROUBLESHOOTING.md](DOCUMENTATION/TROUBLESHOOTING.md) — Diagnostics and solutions for common operational issues
+- [INSTALLATION_VERIFICATION.md](DOCUMENTATION/INSTALLATION_VERIFICATION.md) — 22-point post-install verification protocol
+- [RELEASE_MANIFEST.md](DOCUMENTATION/RELEASE_MANIFEST.md) — Product manifest & software bill of materials
+- [SYSTEM_REQUIREMENTS.md](DOCUMENTATION/SYSTEM_REQUIREMENTS.md) — Minimum vs. recommended hardware specifications
+- [THIRD_PARTY_DEPENDENCIES.md](DOCUMENTATION/THIRD_PARTY_DEPENDENCIES.md) — Inventory of all Composer & npm packages
+- [LICENSE_INFO.md](DOCUMENTATION/LICENSE_INFO.md) — Commercial rights & legal clearance notice
+- [TESTING_REPORT.md](DOCUMENTATION/TESTING_REPORT.md) — Quality assurance test execution report
+- [CHANGELOG.md](DOCUMENTATION/CHANGELOG.md) — Chronological release history for Version 1.0.0
+- [GAME_DESIGN_DOCUMENT.md](DOCUMENTATION/GAME_DESIGN_DOCUMENT.md) — Narrative, mechanics, and puzzle GDD
+- [TECHNICAL_DOCUMENTATION.md](DOCUMENTATION/TECHNICAL_DOCUMENTATION.md) — Three.js architecture & Web Audio manual
+- [API_DOCUMENTATION.md](DOCUMENTATION/API_DOCUMENTATION.md) — REST API specification with schemas
+- [DATABASE_DOCUMENTATION.md](DOCUMENTATION/DATABASE_DOCUMENTATION.md) — ER diagram & 14 normalized tables
 - [ADMIN_GUIDE.md](DOCUMENTATION/ADMIN_GUIDE.md) — Studio administrator portal manual
-- [PLAYER_GUIDE.md](DOCUMENTATION/PLAYER_GUIDE.md) — Field manual for players and controls walkthrough
-- [DEPLOYMENT_GUIDE.md](DOCUMENTATION/DEPLOYMENT_GUIDE.md) — Production DevOps, Nginx, SSL, and backup manual
-- [ASSET_LICENSES.md](DOCUMENTATION/ASSET_LICENSES.md) — Commercial asset clearance and IP audit register
-- [TESTING_REPORT.md](DOCUMENTATION/TESTING_REPORT.md) — Quality assurance test suite execution report
-- [CHANGELOG.md](DOCUMENTATION/CHANGELOG.md) — Chronological version and release history
-- [RELEASE_CHECKLIST.md](DOCUMENTATION/RELEASE_CHECKLIST.md) — 23-point verified pre-flight checklist
+- [PLAYER_GUIDE.md](DOCUMENTATION/PLAYER_GUIDE.md) — Operative field manual & controls walkthrough
 
 ---
 

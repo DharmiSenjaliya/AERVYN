@@ -5,26 +5,37 @@ All notable changes to the *AERVYN: ECHOES OF TIME* codebase are documented here
 
 ---
 
-## [Version 1.0.0] — 2026-11-26 (Commercial Release Master)
+## [Version 1.0.0] — 2026-11-26 (Commercial Master Handover Release)
+
+### Commercial Packaging & Handover Architecture (Prompt 11 & 12)
+- **Centralized White-Label & Reskin Architecture:**
+  - Built `BrandingController` and `AdminBrandingController` with database persistence in `game_settings`.
+  - Added optional white-label customization of product name, tagline, company identity, logo, favicon, and CSS color variables (`--color-cyan`, `--color-purple`, `--color-gold`).
+  - Added dedicated Admin Management page (`/admin/branding`) featuring real-time previews (Header, Login, Dashboard, Loading, Menu, Footer).
+  - Enforced safe `RESET TO AERVYN DEFAULT` action that restores the official AERVYN brand identity without modifying player accounts or database tables.
+- **Dynamic Feature Flags System:**
+  - Centralized toggles for Demo Mode, Social Hub, Leaderboard, Friends, Challenges, Achievements, Buyer Inquiry, Product Showcase, White Label, Analytics, and Landing Page.
+- **Commercial Showcase & Buyer Demo Mode:**
+  - Public Commercial Landing Page (`/`) with 4-world previews, features grid, what's included inventory, realistic system specs, and inquiry form.
+  - Sandboxed Buyer Demo Mode (`/demo`) and Completion Screen (`/demo/complete`) with isolated in-memory evaluation milestones and zero database contamination.
+  - Commercial Product Specifications Page (`/product`).
+  - Buyer Inquiries Pipeline (`POST /api/inquiries`) and Admin Triage CRM (`/admin/inquiries`).
+- **DevOps & Turnkey Handover Assets:**
+  - Created production deployment templates for Nginx (`deployment/nginx/`), Apache (`deployment/apache/`), Systemd, and Supervisor.
+  - Created operational automation scripts (`scripts/install-windows.bat`, `install-linux.sh`, `backup-db.bat`, `backup-db.sh`, `restore-db.bat`, `restore-db.sh`, `deploy.bat`, `deploy.sh`).
+  - Created clean environment templates (`backend/.env.example` and `frontend/.env.example`).
+  - Expanded comprehensive documentation suite to 18 operational and architectural manuals.
 
 ### Security & Hardening
-- Implemented rate limiting (`throttle:auth` 10 req/min, `throttle:api` 120 req/min) on public endpoints.
-- Enforced strict MIME type inspection (`jpeg`, `png`, `webp`) and filename regex sanitization on media uploads.
+- Implemented rate limiting (`throttle:auth` 5–10 req/min, `throttle:api` 60–120 req/min) on public endpoints.
+- Enforced strict MIME type inspection (`png`, `jpg`, `webp`, `svg`, `ico`) and filename regex sanitization on media and branding uploads.
 - Protected the official AERVYN brand asset (`aervyn-logo.png`) against administrative deletion.
 - Added normalized error boundary (`ErrorBoundary.jsx`) intercepting uncaught runtime/3D exceptions without technical stack trace leaks.
 - Enhanced API interceptor with normalized `userFriendlyMessage` handling for 401, 403, 422, 429, 500, and network timeout scenarios.
 
-### Performance & Engine Optimization
-- Added `useGraphicsSettings.js` reactive hook supporting dynamic graphics presets (`low`, `medium`, `high`).
-- Dynamic shadow map resolution scaling (`512` -> `1024` -> `2048`).
-- Dynamic device pixel ratio (DPR) throttling (`0.8` -> `1.0` -> `[1, 2]`) improving frame rates on low-end hardware.
-- Starfield particle density optimization (`1000` -> `2200` -> `3500`).
-- Persistent graphics preference stored in `localStorage`.
-
-### Quality Assurance & Testing
-- Created `UserJourneyE2ETest.php` exercising full end-to-end user journeys (Ending A, Ending B, checkpoint resume, anti-cheat safeguards).
-- Reached 100% pass rate across 50 automated tests (957 assertions).
-- Compiled full 12-document master documentation suite in `DOCUMENTATION/`.
+### Quality Assurance & Automated Testing
+- Expanded PHPUnit test suite to **59 automated tests (1,161 assertions)** with 100% pass rate.
+- Verified Vite 8 production build (2,890 modules transformed, 0 errors, built in 1.28s).
 
 ---
 
@@ -58,25 +69,3 @@ All notable changes to the *AERVYN: ECHOES OF TIME* codebase are documented here
 - Designed and built World 4: The Last Timeline (The Zero Horizon).
 - Created Continuum Synchronization puzzle and Nexus Decision room.
 - Orchestrated Dual Narrative Endings: Ending A (The Prime Timeline Weaver) and Ending B (The Shattered Continuum).
-- Added in-game Story Journal (`[J]`) and dynamic lore discovery engine.
-
----
-
-## [Prompt 5] — 2026-11-26
-- Developed World 3: The Fractured Future floating sky islands and Phase Bridge.
-- Built Time Labyrinth 3-switch resonator puzzle.
-- Created multi-phase boss encounter with **THE CHRONARCH** featuring rotating orbital energy shields.
-
----
-
-## [Prompt 4] — 2026-11-26
-- Built World 2: The Broken Present cybernetic ruins and neon rain atmosphere.
-- Created highway terminals, communications relay, and underground research bunker.
-- Added Central Time Core reactor repair sequence.
-
----
-
-## [Prompt 1-3] — 2026-11-26
-- Project architecture initialization (Laravel 12 + React 19 + Three.js).
-- Built World 1: The Lost Kingdom castle courtyard, character traversal, and ancient door puzzle.
-- Integrated Web Audio API synthesized procedural sound engine.

@@ -33,6 +33,8 @@ use App\Http\Controllers\Social\SocialLeaderboardController;
 use App\Http\Controllers\Admin\AdminSocialController;
 use App\Http\Controllers\BuyerInquiryController;
 use App\Http\Controllers\Admin\AdminInquiryController;
+use App\Http\Controllers\BrandingController;
+use App\Http\Controllers\Admin\AdminBrandingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,13 +42,19 @@ use App\Http\Controllers\Admin\AdminInquiryController;
 |--------------------------------------------------------------------------
 */
 
-// Public Authentication & Feedback Endpoints
+// Public Authentication, Feedback & Branding Endpoints
 Route::prefix('auth')->middleware('throttle:auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 });
 Route::post('/feedback', [AdminFeedbackController::class, 'store'])->middleware('throttle:auth');
 Route::post('/inquiries', [BuyerInquiryController::class, 'store'])->middleware('throttle:auth');
+
+// Public Branding & Features Configuration
+Route::prefix('config')->group(function () {
+    Route::get('/branding', [BrandingController::class, 'getPublicBranding']);
+    Route::get('/features', [BrandingController::class, 'getPublicFeatures']);
+});
 
 // Authenticated Routes (Sanctum Guard)
 Route::middleware('auth:sanctum')->group(function () {
@@ -187,5 +195,14 @@ Route::middleware('auth:sanctum')->group(function () {
         // 14. Buyer Inquiries & Commercial Licensing
         Route::get('/inquiries', [AdminInquiryController::class, 'index']);
         Route::put('/inquiries/{id}', [AdminInquiryController::class, 'update']);
+
+        // 15. Product Settings, White-Label & Feature Flags
+        Route::get('/branding', [AdminBrandingController::class, 'index']);
+        Route::put('/branding', [AdminBrandingController::class, 'update']);
+        Route::post('/branding/logo', [AdminBrandingController::class, 'uploadLogo']);
+        Route::post('/branding/favicon', [AdminBrandingController::class, 'uploadFavicon']);
+        Route::post('/branding/reset', [AdminBrandingController::class, 'resetToDefault']);
+        Route::get('/features', [AdminBrandingController::class, 'getFeatures']);
+        Route::put('/features', [AdminBrandingController::class, 'updateFeatures']);
     });
 });

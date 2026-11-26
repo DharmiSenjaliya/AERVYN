@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useBranding } from '../../context/BrandingContext';
 
 /**
- * Official AERVYN Logo Component
- * Strictly renders the official brand asset at /assets/aervyn-logo.png
- * Proportions and original image are permanently preserved.
+ * Brand Logo Component
+ * Strictly renders the official AERVYN brand asset at /assets/aervyn-logo.png by default.
+ * When white-label mode is enabled by an enterprise buyer, displays the configured
+ * custom brand asset while maintaining proportional fidelity.
  */
 export default function Logo({
   size = 'md',
@@ -14,6 +16,8 @@ export default function Logo({
   className = '',
   style = {}
 }) {
+  const { branding } = useBranding();
+
   const sizeMap = {
     xs: { height: 26, width: 'auto' },
     sm: { height: 36, width: 'auto' },
@@ -24,6 +28,12 @@ export default function Logo({
   };
 
   const dimensions = sizeMap[size] || sizeMap.md;
+
+  // Determine active logo source and alt text
+  const isWhiteLabel = branding?.white_label_enabled;
+  const logoSrc = isWhiteLabel && branding?.logo_url ? branding.logo_url : '/assets/aervyn-logo.png';
+  const logoAlt = isWhiteLabel && branding?.product_name ? branding.product_name : 'AERVYN: Echoes of Time';
+  const taglineText = isWhiteLabel && branding?.tagline ? branding.tagline : 'Echoes of Time';
 
   const logoImage = (
     <div
@@ -38,8 +48,8 @@ export default function Logo({
       }}
     >
       <img
-        src="/assets/aervyn-logo.png"
-        alt="AERVYN: Echoes of Time"
+        src={logoSrc}
+        alt={logoAlt}
         style={{
           height: dimensions.height,
           width: dimensions.width,
@@ -81,7 +91,7 @@ export default function Logo({
             textShadow: '0 0 10px rgba(0, 217, 255, 0.5)'
           }}
         >
-          Echoes of Time
+          {taglineText}
         </span>
       )}
     </div>

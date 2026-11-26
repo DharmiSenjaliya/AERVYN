@@ -1,0 +1,18 @@
+# AERVYN: ECHOES OF TIME - Systemd Service for Standalone PHP-FPM / Laravel
+# Place in /etc/systemd/system/aervyn-serve.service
+
+[Unit]
+Description=AERVYN Backend API Daemon
+After=network.target mysql.service
+
+[Service]
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=5
+WorkingDirectory=/var/www/aervyn/backend
+ExecStart=/usr/bin/php /var/www/aervyn/backend/artisan serve --host=127.0.0.1 --port=8000
+Environment=APP_ENV=production
+
+[Install]
+WantedBy=multi-user.target

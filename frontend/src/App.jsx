@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { AudioProvider } from './context/AudioContext';
+import { BrandingProvider } from './context/BrandingContext';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import AppRoutes from './routes/AppRoutes';
 import './styles/theme.css';
@@ -16,7 +17,9 @@ export default function App() {
       <BrowserRouter>
         <AuthProvider>
           <AudioProvider>
-            <AppRoutes />
+            <BrandingProvider>
+              <AppRoutes />
+            </BrandingProvider>
           </AudioProvider>
         </AuthProvider>
       </BrowserRouter>
