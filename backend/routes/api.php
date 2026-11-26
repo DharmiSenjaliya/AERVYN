@@ -35,6 +35,7 @@ use App\Http\Controllers\BuyerInquiryController;
 use App\Http\Controllers\Admin\AdminInquiryController;
 use App\Http\Controllers\BrandingController;
 use App\Http\Controllers\Admin\AdminBrandingController;
+use App\Http\Controllers\Admin\AdminProductContentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,11 +50,13 @@ Route::prefix('auth')->middleware('throttle:auth')->group(function () {
 });
 Route::post('/feedback', [AdminFeedbackController::class, 'store'])->middleware('throttle:auth');
 Route::post('/inquiries', [BuyerInquiryController::class, 'store'])->middleware('throttle:auth');
+Route::post('/demo/telemetry', [BuyerInquiryController::class, 'recordDemoTelemetry']);
 
 // Public Branding & Features Configuration
 Route::prefix('config')->group(function () {
     Route::get('/branding', [BrandingController::class, 'getPublicBranding']);
     Route::get('/features', [BrandingController::class, 'getPublicFeatures']);
+    Route::get('/product-content', [AdminProductContentController::class, 'index']);
 });
 
 // Authenticated Routes (Sanctum Guard)
@@ -194,6 +197,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // 14. Buyer Inquiries & Commercial Licensing
         Route::get('/inquiries', [AdminInquiryController::class, 'index']);
+        Route::get('/inquiries/export', [AdminInquiryController::class, 'exportCsv']);
+        Route::get('/inquiries/analytics', [AdminInquiryController::class, 'analytics']);
+        Route::get('/inquiries/{id}', [AdminInquiryController::class, 'show']);
         Route::put('/inquiries/{id}', [AdminInquiryController::class, 'update']);
 
         // 15. Product Settings, White-Label & Feature Flags
@@ -204,5 +210,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/branding/reset', [AdminBrandingController::class, 'resetToDefault']);
         Route::get('/features', [AdminBrandingController::class, 'getFeatures']);
         Route::put('/features', [AdminBrandingController::class, 'updateFeatures']);
+
+        // 16. Commercial Product Content CMS
+        Route::get('/product-content', [AdminProductContentController::class, 'index']);
+        Route::put('/product-content', [AdminProductContentController::class, 'update']);
+        Route::post('/product-content/reset', [AdminProductContentController::class, 'reset']);
     });
 });

@@ -19,6 +19,7 @@ import LostKingdomScene from '../../game/scenes/LostKingdomScene';
 import DesktopControls from '../../game/controls/DesktopControls';
 import MobileControls from '../../game/controls/MobileControls';
 import AudioSystem from '../../game/systems/AudioSystem';
+import api from '../../services/api';
 
 /**
  * AERVYN: Echoes of Time - Buyer Demo Mode
@@ -39,6 +40,22 @@ export default function BuyerDemoPage() {
   const [showPuzzleModal, setShowPuzzleModal] = useState(false);
   const [puzzleDial, setPuzzleDial] = useState(45); // target: 180 degrees
   const [notification, setNotification] = useState(null);
+
+  // Zero-PII Telemetry Tracking
+  const sessionIdRef = useRef('demo_' + Math.random().toString(36).substring(2, 12));
+  const startTimeRef = useRef(Date.now());
+
+  const sendTelemetry = (milestoneStep, completed = false) => {
+    const duration = Math.round((Date.now() - startTimeRef.current) / 1000);
+    api.post('/demo/telemetry', {
+      session_id: sessionIdRef.current,
+      milestone_step: milestoneStep,
+      completed: completed,
+      duration_seconds: duration
+    }).catch(() => {
+      // Graceful fallback if offline
+    });
+  };
 
   const showNotification = (msg) => {
     setNotification(msg);
@@ -66,6 +83,7 @@ export default function BuyerDemoPage() {
     AudioSystem.playInteract();
     setDemoPhase('playing');
     showNotification('Objective: Explore the ancient courtyard & collect the Chrono Fragment.');
+    sendTelemetry(1, false);
   };
 
   const handleCollectFragment = () => {
@@ -74,6 +92,7 @@ export default function BuyerDemoPage() {
     setHasFragment(true);
     setDemoStep(2);
     showNotification('Chrono Fragment acquired! Approach the central pedestal to align the rune dial.');
+    sendTelemetry(2, false);
   };
 
   const handleOpenPuzzle = () => {
@@ -97,12 +116,14 @@ export default function BuyerDemoPage() {
       setPortalActive(true);
       setDemoStep(3);
       showNotification('Runic alignment stabilized! The Gateway Portal is now active.');
+      sendTelemetry(3, false);
     }
   };
 
   const handleStepIntoPortal = () => {
     if (!portalActive) return;
     AudioSystem.playPortalTeleport();
+    sendTelemetry(3, true);
     setDemoPhase('completed');
     navigate('/demo/complete');
   };

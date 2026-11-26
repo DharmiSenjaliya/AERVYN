@@ -6,19 +6,23 @@ Welcome to the official technical, commercial, and operational documentation rep
 ---
 
 ### 1. Commercial Handover & Buyer Package
-1. [COMMERCIAL HANDOVER MANUAL](COMMERCIAL_HANDOVER.md)
+1. [COMMERCIAL PRODUCT GUIDE & B2B SALES SPECIFICATION](COMMERCIAL_PRODUCT_GUIDE.md)
+   - Master commercial executive pitch, target buyer personas, monetization models, commercial package tiers A/B/C, and technical demonstration links.
+2. [BUYER DEMO & DUE DILIGENCE CHECKLIST](BUYER_DEMO_CHECKLIST.md)
+   - Step-by-step verification checklist for sales executives conducting live buyer walkthroughs or technical due diligence across all 5 demo phases.
+3. [COMMERCIAL HANDOVER MANUAL](COMMERCIAL_HANDOVER.md)
    - Comprehensive technical transfer guide covering product overview, architecture, white-label configuration, reskin boundaries, security, and rollback procedures.
-2. [BUYER HANDOVER CHECKLIST](BUYER_HANDOVER_CHECKLIST.md)
+4. [BUYER HANDOVER CHECKLIST](BUYER_HANDOVER_CHECKLIST.md)
    - Exhaustive technical transfer checklist covering source code, configuration templates, administrative setup, and acceptance criteria.
-3. [COMMERCIAL PRODUCT OVERVIEW](PRODUCT_OVERVIEW.md)
+5. [COMMERCIAL PRODUCT OVERVIEW](PRODUCT_OVERVIEW.md)
    - Executive summary, turnkey licensing options, target runtime, game scope, and commercial deliverable inventory.
-4. [BUYER FEATURE LIST & DELIVERABLES INVENTORY](BUYER_FEATURE_LIST.md)
+6. [BUYER FEATURE LIST & DELIVERABLES INVENTORY](BUYER_FEATURE_LIST.md)
    - Detailed feature inventory of 3D engine capabilities, 4 worlds, audio synthesis, gamification, social layer, and admin features.
-5. [BUYER DEMO GUIDE & EVALUATION WORKFLOW](DEMO_GUIDE.md)
+7. [BUYER DEMO GUIDE & EVALUATION WORKFLOW](DEMO_GUIDE.md)
    - Step-by-step buyer evaluation guide for the isolated `/demo` slice and `/demo/complete` screen.
-6. [RELEASE MANIFEST & BILL OF MATERIALS](RELEASE_MANIFEST.md)
+8. [RELEASE MANIFEST & BILL OF MATERIALS](RELEASE_MANIFEST.md)
    - Official product manifest, software bill of materials, supported form factors, and realistic hardware expectations.
-7. [COMMERCIAL RIGHTS & LICENSE NOTICE](LICENSE_INFO.md)
+9. [COMMERCIAL RIGHTS & LICENSE NOTICE](LICENSE_INFO.md)
    - Clear legal boundary distinguishing original proprietary code, permissive third-party open-source libraries, and commercial transfer terms.
 
 ---

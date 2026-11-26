@@ -72,11 +72,29 @@
 - **Social Suspension Tool:**
   - Temporarily suspend a disruptive player's social permissions (disabling challenges and friend requests) without terminating their offline campaign save progress.
 
-### 10. Commercial Inquiries & Buyer Pipeline (`/admin/inquiries`)
-- **Overview Metrics:**
-  - Total inquiries, new leads, active discussions, qualified buyers, closed deals.
-- **Pipeline Triage:**
-  - Review prospect full name, business email, company name, country, and inquiry type (`game_purchase`, `b2b_licensing`, `customization`, `reskin`, `technical_inquiry`, `partnership`, `other`).
+### 10. Commercial Inquiries & B2B Lead CRM (`/admin/inquiries`)
+- **Overview Metrics & Demo Conversion Funnel:**
+  - KPI counters: Total leads, new leads, active discussions, negotiation/won deals, urgent/high priority.
+  - Zero-PII demo telemetry card: Total demo sessions, Milestone 1 reached, Milestone 2 reached, completions, and completion rate %.
+- **Lead Pipeline Triage:**
+  - Review prospect full name, business email, phone number, company name, country, budget range, and preferred contact method (`email`, `phone`, `video_call`).
   - Read prospect requirements message and review submission timestamp.
-  - Update inquiry pipeline status (`new`, `contacted`, `qualified`, `closed`).
-  - Log internal CRM negotiation notes, terms agreed, and follow-up milestones.
+  - Set priority tier (`low`, `medium`, `high`, `urgent`) with visual badge indicators.
+  - Schedule next follow-up date and record follow-up action notes.
+  - Log internal CRM negotiation notes, deal terms, and commercial milestones.
+  - Export leads to safe CSV via one-click download (`/api/admin/inquiries/export`).
+
+### 11. White-Label & Reskin Branding Suite (`/admin/branding`)
+- Dynamic runtime theming allowing brand customization without editing code:
+  - Game Title & Tagline reskin.
+  - Primary, Secondary, and Accent color hex pickers.
+  - Official brand logo upload and live preview.
+  - Fail-safe "Reset to AERVYN Default" button for instant rollback.
+
+### 12. Product Marketing Content CMS (`/admin/product-content`)
+- Full content control over the public commercial landing page:
+  - Hero title, official tagline, and introduction narrative.
+  - Product overview section heading and descriptive text.
+  - Package A, B, and C commercial names and deliverable descriptions.
+  - Commercial inquiry email and telephone contact channels.
+  - Instant "Reset to Defaults" button.

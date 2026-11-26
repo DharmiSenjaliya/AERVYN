@@ -21,8 +21,12 @@
 **AERVYN: ECHOES OF TIME** is an original, commercially sellable 3D adventure game combining deep atmospheric exploration, environmental puzzle solving, time-travel mechanics, and multi-timeline narrative progression.
 
 Built on a unified **React 19 + Three.js (React Three Fiber) + Laravel 12** architecture, *AERVYN* delivers a complete, cohesive commercial package containing:
-- A public **Commercial Showcase & Landing Page** (`/`) featuring 4-world previews, features grid, deliverables inventory, system requirements, and an interactive commercial inquiry form.
-- An isolated **Buyer Demo Mode** (`/demo`) and **Demo Completion Screen** (`/demo/complete`) allowing prospective buyers to evaluate gameplay responsiveness, mechanics, and WebGL rendering in under 3 minutes without polluting production player databases.
+- A public **Commercial Showcase & Sales Platform** (`/`) featuring 22+ comprehensive B2B sections, 4-world previews, 8 gameplay mechanics, interactive screenshot gallery with lightbox, video trailer placeholder, deliverables matrix, system requirements, FAQ, and an interactive commercial inquiry form.
+- An interactive **Buyer Presentation Mode** (`/presentation`) providing a 15-slide guided executive walkthrough deck designed for publisher meetings, investor pitches, and executive review.
+- A dedicated **Printable Product Brochure** (`/brochure`) optimized for both on-screen viewing and browser-native print / PDF export (`window.print()`).
+- An isolated **Buyer Demo Mode** (`/demo`) and **Demo Completion Screen** (`/demo/complete`) with real-time zero-PII conversion funnel telemetry (`/api/demo/telemetry`) allowing prospective buyers to evaluate gameplay responsiveness in under 3 minutes.
+- A **Lead Management CRM** (`/admin/inquiries`) in the admin panel featuring priority triage (`low`, `medium`, `high`, `urgent`), budget tracking, preferred contact scheduling, follow-up calendar notes, and safe CSV export.
+- A **Product Marketing Content CMS** (`/admin/product-content`) allowing administrators to update landing page copy, hero taglines, package descriptions, and sales contact channels live without code modifications.
 - A controlled **White-Label & Reskin Architecture** with dedicated Admin UI (`/admin/branding`) supporting buyer branding, logo/favicon uploads, CSS theme colors, and safe reset to default AERVYN identity.
 - A fully playable **Single-Player Story Campaign** spanning 4 distinct temporal worlds and Dual Narrative Endings that functions independently offline from a gameplay flow perspective.
 - A premium **Player Gaming Dashboard** with level progression, XP gauges, achievements, inventory tracking, and personal lore journals.

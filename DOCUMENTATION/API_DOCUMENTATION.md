@@ -230,37 +230,67 @@ All endpoints require `Authorization: Bearer <admin_token>` and pass through `ad
 
 ---
 
-## 6. Commercial & Buyer Inquiry Endpoints
+## 6. Commercial, Buyer Telemetry & Marketing CMS Endpoints
 
-### Public Submission
+### Public Commercial Endpoints
 | Method | Path | Description | Access | Rate Limit |
 |---|---|---|---|---|
-| `POST` | `/inquiries` | Submit prospective buyer inquiry (name, email, company, country, type, message) | Public | 5 req/min (`throttle:auth`) |
+| `POST` | `/inquiries` | Submit prospective buyer inquiry (with phone, budget, contact method) | Public | 5 req/min (`throttle:auth`) |
+| `POST` | `/demo/telemetry` | Record zero-PII buyer demo milestone progress (1, 2, 3, completed) | Public | Standard |
+| `GET` | `/config/product-content` | Fetch live commercial marketing copy, hero tagline, and package details | Public | Cached |
 
-#### Request Payload:
+#### Inquiry Request Payload:
 ```json
 {
   "name": "Jane Doe",
   "email": "jane@acme.com",
+  "phone": "+1 (555) 019-2834",
   "company": "Acme Interactive",
   "country": "United States",
   "inquiry_type": "game_purchase",
+  "budget_range": "$25k-$50k",
+  "preferred_contact": "video_call",
   "message": "Interested in full commercial source code buyout for Q1 2027 launch."
 }
 ```
 
-### Administrative Inquiries Triage
+#### Demo Telemetry Payload:
+```json
+{
+  "session_id": "demo_a9b8c7d6e5",
+  "milestone_step": 2,
+  "completed": false,
+  "duration_seconds": 45
+}
+```
+
+### Administrative Inquiries & CRM Management
 All endpoints require `Authorization: Bearer <admin_token>` and pass through `admin` middleware:
 
 | Method | Path | Description |
 |---|---|---|
-| `GET` | `/admin/inquiries` | List all inquiries with KPI counts (total, new, contacted, qualified, closed) |
-| `PUT` | `/admin/inquiries/{id}` | Update inquiry pipeline status and append internal negotiation notes |
+| `GET` | `/admin/inquiries` | List all inquiries with KPI counts and filters |
+| `GET` | `/admin/inquiries/{id}` | Inspect full details of a specific prospective buyer lead |
+| `PUT` | `/admin/inquiries/{id}` | Update lead status, priority, follow-up schedule, and notes |
+| `GET` | `/admin/inquiries/analytics` | Aggregated lead analytics and demo conversion funnel metrics |
+| `GET` | `/admin/inquiries/export` | Stream safe CSV file of commercial inquiries (passwords excluded) |
 
-#### Triage Payload:
+#### Lead Triage Payload:
 ```json
 {
-  "status": "contacted",
-  "admin_notes": "Initial response email sent. Intro meeting scheduled for Tuesday."
+  "status": "discussion",
+  "priority": "urgent",
+  "follow_up_date": "2026-12-01",
+  "follow_up_notes": "Schedule live Zoom walkthrough on Friday with CTO.",
+  "admin_notes": "Qualified enterprise prospect with approved Q1 buyout budget."
 }
 ```
+
+### Administrative Product Marketing Content CMS
+All endpoints require `Authorization: Bearer <admin_token>`:
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/admin/product-content` | Retrieve editable marketing content and package descriptions |
+| `PUT` | `/admin/product-content` | Update landing page copy without modifying source code |
+| `POST` | `/admin/product-content/reset` | Restore marketing copy to standard AERVYN factory defaults |

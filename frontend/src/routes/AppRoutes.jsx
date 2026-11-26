@@ -10,6 +10,8 @@ import GameLayout from '../layouts/GameLayout';
 // Public & Auth Pages
 import LandingPage from '../pages/public/LandingPage';
 import ProductInfoPage from '../pages/public/ProductInfoPage';
+import BuyerPresentationPage from '../pages/public/BuyerPresentationPage';
+import ProductBrochurePage from '../pages/public/ProductBrochurePage';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import AdminLoginPage from '../pages/auth/AdminLoginPage';
@@ -52,6 +54,7 @@ import MediaManagementPage from '../pages/admin/MediaManagementPage';
 import AdminSocialPage from '../pages/admin/AdminSocialPage';
 import AdminInquiriesPage from '../pages/admin/AdminInquiriesPage';
 import AdminBrandingPage from '../pages/admin/AdminBrandingPage';
+import AdminProductContentPage from '../pages/admin/AdminProductContentPage';
 
 // 3D Game Engine View
 import GameView from '../pages/game/GameView';
@@ -85,6 +88,8 @@ export default function AppRoutes() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<LandingPage />} />
         <Route path="/product" element={<ProductInfoPage />} />
+        <Route path="/presentation" element={<BuyerPresentationPage />} />
+        <Route path="/brochure" element={<ProductBrochurePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Route>
@@ -168,6 +173,7 @@ export default function AppRoutes() {
         <Route path="reports" element={<AnalyticsPage />} />
         <Route path="inquiries" element={<AdminInquiriesPage />} />
         <Route path="branding" element={<AdminBrandingPage />} />
+        <Route path="product-content" element={<AdminProductContentPage />} />
         <Route path="product-settings" element={<AdminBrandingPage />} />
         <Route path="users" element={<AdminUsersPage />} />
         <Route path="roles" element={<ActivityLogsPage />} />
