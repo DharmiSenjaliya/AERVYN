@@ -10,6 +10,7 @@ export default function IntroCinematic({ worldId = 'world_1', onComplete = () =>
   const [fadeStage, setFadeStage] = useState(0); // 0: Title, 1: Lore, 2: Call to Action
 
   const isWorld2 = worldId === 'world_2';
+  const isWorld3 = worldId === 'world_3';
 
   useEffect(() => {
     AudioSystem.startAmbience();
@@ -80,11 +81,11 @@ export default function IntroCinematic({ worldId = 'world_1', onComplete = () =>
                 fontSize: '0.85rem',
                 letterSpacing: '0.3em',
                 textTransform: 'uppercase',
-                color: isWorld2 ? 'var(--color-purple)' : 'var(--color-cyan)',
+                color: isWorld3 ? 'var(--color-gold)' : isWorld2 ? 'var(--color-purple)' : 'var(--color-cyan)',
                 fontWeight: 700
               }}
             >
-              {isWorld2 ? 'YEAR 2026 \u2022 PRESENT ERA' : 'YEAR -840 \u2022 PAST ERA'}
+              {isWorld3 ? 'YEAR 3140 \u2022 FUTURE HORIZON' : isWorld2 ? 'YEAR 2026 \u2022 PRESENT ERA' : 'YEAR -840 \u2022 PAST ERA'}
             </span>
             <h1
               style={{
@@ -94,7 +95,7 @@ export default function IntroCinematic({ worldId = 'world_1', onComplete = () =>
                 letterSpacing: '0.08em'
               }}
             >
-              {isWorld2 ? 'THE BROKEN PRESENT' : 'THE LOST KINGDOM'}
+              {isWorld3 ? 'THE FRACTURED FUTURE' : isWorld2 ? 'THE BROKEN PRESENT' : 'THE LOST KINGDOM'}
             </h1>
           </div>
         )}
@@ -109,7 +110,9 @@ export default function IntroCinematic({ worldId = 'world_1', onComplete = () =>
                 margin: 0
               }}
             >
-              {isWorld2
+              {isWorld3
+                ? 'The portal transports you to the end of time. Floating celestial islands drift above a violent cosmic vortex where history itself is collapsing.'
+                : isWorld2
                 ? 'Emerging through the portal, the world of 2026 is shattered. Time distortions suspend skyscrapers mid-collapse, and security drones guard the ruins.'
                 : 'Before the cataclysmic temporal fracture, the ancient castle stood as the cradle of the Chrono Keystone.'}
             </p>
@@ -127,7 +130,9 @@ export default function IntroCinematic({ worldId = 'world_1', onComplete = () =>
                 margin: 0
               }}
             >
-              {isWorld2
+              {isWorld3
+                ? 'Reclaim the three Chrono Shards. Solve the Time Labyrinth, infiltrate the central spire, and defeat THE CHRONARCH to restore the Master Timeline Engine!'
+                : isWorld2
                 ? 'Investigate the city. Reclaim the 3 Quantum Energy Cores, breach the underground research lab, and repair the Central Time Core.'
                 : 'Discover the ancient device. Collect the three scattered energy fragments. Restore the first timeline gateway.'}
             </p>

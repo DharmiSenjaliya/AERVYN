@@ -1,10 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import CharacterController from './CharacterController';
 import DesktopControls from '../controls/DesktopControls';
 import GameState from '../engine/GameState';
 import InteractionSystem from '../systems/InteractionSystem';
+import AudioSystem from '../systems/AudioSystem';
 
 /**
  * Enhanced 3D Protagonist Character Model & Procedural Animator
@@ -18,6 +19,8 @@ import InteractionSystem from '../systems/InteractionSystem';
 export default function PlayerCharacter({ playerRef, mobileInput = null }) {
   const controller = useRef(new CharacterController());
 
+  const [isAttacking, setIsAttacking] = useState(false);
+
   // Mesh limb refs for animation
   const torsoRef = useRef();
   const leftLegRef = useRef();
@@ -27,6 +30,7 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
   const chronoCoreRef = useRef();
   const capeRef = useRef();
   const visorRef = useRef();
+  const attackBladeRef = useRef();
 
   useEffect(() => {
     // Listen for interaction events to trigger reach pose
@@ -34,8 +38,18 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
       controller.current.triggerInteractAnimation();
     };
 
+    const handleAttackEvent = () => {
+      setIsAttacking(true);
+      AudioSystem.playPlayerAttack();
+      setTimeout(() => setIsAttacking(false), 260);
+    };
+
     window.addEventListener('aervyn:player-interact', handleInteractEvent);
-    return () => window.removeEventListener('aervyn:player-interact', handleInteractEvent);
+    window.addEventListener('aervyn:player-attack', handleAttackEvent);
+    return () => {
+      window.removeEventListener('aervyn:player-interact', handleInteractEvent);
+      window.removeEventListener('aervyn:player-attack', handleAttackEvent);
+    };
   }, []);
 
   useFrame((state, delta) => {
@@ -83,15 +97,24 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
     const isGrounded = controller.current.isGrounded;
     const animSpeed = sprint ? 16 : 9.5;
 
-    // A. Interacting Pose (Arm Reach)
-    if (isInteracting) {
+    // A. Attacking Pose (Chrono Strike Slash)
+    if (isAttacking) {
+      if (rightArmRef.current) {
+        rightArmRef.current.rotation.x = -1.75;
+        rightArmRef.current.rotation.y = -0.4;
+        rightArmRef.current.rotation.z = -0.6;
+      }
+      if (torsoRef.current) torsoRef.current.rotation.y = 0.35;
+    }
+    // B. Interacting Pose (Arm Reach)
+    else if (isInteracting) {
       if (rightArmRef.current) {
         rightArmRef.current.rotation.x = -1.35; // Extend arm forward toward relic
         rightArmRef.current.rotation.z = 0.2;
       }
       if (torsoRef.current) torsoRef.current.rotation.x = 0.12;
     }
-    // B. In-Air Jump Pose
+    // C. In-Air Jump Pose
     else if (!isGrounded) {
       if (leftLegRef.current) leftLegRef.current.rotation.x = 0.45;
       if (rightLegRef.current) rightLegRef.current.rotation.x = 0.25;
@@ -246,6 +269,19 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
             <boxGeometry args={[0.12, 0.16, 0.12]} />
             <meshStandardMaterial color="#0c162d" roughness={0.3} metalness={0.9} />
           </mesh>
+
+          {/* Energy Blade Slash Effect during Combat */}
+          {isAttacking && (
+            <mesh position={[0, -0.65, 0.35]} rotation={[0.4, 0, 0]}>
+              <boxGeometry args={[0.08, 0.8, 0.25]} />
+              <meshStandardMaterial
+                color="#00D9FF"
+                emissive="#7047FF"
+                emissiveIntensity={3.5}
+                roughness={0.1}
+              />
+            </mesh>
+          )}
         </group>
       </group>
 

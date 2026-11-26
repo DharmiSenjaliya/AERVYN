@@ -110,37 +110,68 @@ export default function MobileControls({
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '1rem',
+            gap: '0.85rem',
             alignItems: 'flex-end',
             pointerEvents: 'auto',
             marginBottom: '0.5rem'
           }}
         >
-          {/* Interaction Button [E] */}
-          <button
-            onTouchStart={(e) => {
-              e.stopPropagation();
-              InteractionSystem.trigger();
-            }}
-            style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #F5B942 0%, #D48800 100%)',
-              border: '2px solid #FFE082',
-              color: '#080B18',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 15px rgba(245, 185, 66, 0.5)',
-              fontWeight: 800,
-              fontSize: '0.72rem'
-            }}
-          >
-            <Sparkles size={18} />
-            <span>ACT</span>
-          </button>
+          {/* Top Action Row: Attack [F] and Interact [E] */}
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            {/* Attack Button [F] */}
+            <button
+              onTouchStart={(e) => {
+                e.stopPropagation();
+                window.dispatchEvent(new CustomEvent('aervyn:player-attack'));
+              }}
+              style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #EF4444 0%, #991B1B 100%)',
+                border: '2px solid #FCA5A5',
+                color: '#FFFFFF',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 0 15px rgba(239, 68, 68, 0.6)',
+                fontWeight: 800,
+                fontSize: '0.72rem'
+              }}
+              aria-label="Attack [F]"
+            >
+              <Zap size={18} />
+              <span>ATK</span>
+            </button>
+
+            {/* Interaction Button [E] */}
+            <button
+              onTouchStart={(e) => {
+                e.stopPropagation();
+                InteractionSystem.trigger();
+              }}
+              style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #F5B942 0%, #D48800 100%)',
+                border: '2px solid #FFE082',
+                color: '#080B18',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 0 15px rgba(245, 185, 66, 0.5)',
+                fontWeight: 800,
+                fontSize: '0.72rem'
+              }}
+              aria-label="Interact [E]"
+            >
+              <Sparkles size={18} />
+              <span>ACT</span>
+            </button>
+          </div>
 
           {/* Jump & Sprint Row */}
           <div style={{ display: 'flex', gap: '0.85rem' }}>

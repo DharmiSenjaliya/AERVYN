@@ -274,11 +274,35 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
             </div>
           </div>
 
-          {/* World 3 Card (Locked) */}
-          <div style={{ padding: '0.85rem 1rem', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', opacity: 0.55 }}>
+          {/* World 3 Card */}
+          <div
+            style={{
+              padding: '1rem',
+              background: 'rgba(245, 185, 66, 0.14)',
+              border: '1px solid var(--border-gold)',
+              borderRadius: 'var(--radius-sm)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.4rem'
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '0.88rem' }}>World 3: The Future Collapse</span>
-              <span style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)' }}>LOCKED &bull; FUTURE</span>
+              <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#FFFFFF' }}>World 3: The Fractured Future</div>
+              <span style={{ fontSize: '0.72rem', color: 'var(--color-gold)', fontWeight: 700 }}>FUTURE ERA (3140)</span>
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', margin: 0, lineHeight: 1.4 }}>
+              Floating islands over the void, broken sky bridges, 3 Chrono Shards, Time Labyrinth, and The Chronarch boss encounter.
+            </p>
+            <div style={{ marginTop: '0.4rem' }}>
+              <Button
+                variant="gold"
+                size="sm"
+                fullWidth
+                icon={Play}
+                onClick={() => handleSelectWorld('world_3')}
+              >
+                Launch World 3 (Future)
+              </Button>
             </div>
           </div>
 
@@ -316,7 +340,7 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
                 cursor: 'pointer'
               }}
             >
-              World 1: Lost Kingdom (10)
+              World 1: Past (10)
             </button>
             <button
               onClick={() => setMissionWorldTab('world_2')}
@@ -332,7 +356,23 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
                 cursor: 'pointer'
               }}
             >
-              World 2: Broken Present (7)
+              World 2: Present (7)
+            </button>
+            <button
+              onClick={() => setMissionWorldTab('world_3')}
+              style={{
+                flex: 1,
+                padding: '0.45rem',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                borderRadius: 'var(--radius-xs)',
+                border: missionWorldTab === 'world_3' ? '1px solid var(--border-gold)' : '1px solid var(--border-subtle)',
+                background: missionWorldTab === 'world_3' ? 'rgba(245, 185, 66, 0.2)' : 'rgba(255, 255, 255, 0.03)',
+                color: missionWorldTab === 'world_3' ? '#FFFFFF' : 'var(--color-text-dim)',
+                cursor: 'pointer'
+              }}
+            >
+              World 3: Future (7)
             </button>
           </div>
 
@@ -354,7 +394,7 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
                   {m}
                 </div>
               ))
-            ) : (
+            ) : missionWorldTab === 'world_2' ? (
               [
                 '1. Infiltrate Destroyed Cyber Metropolis & Boot City Terminal',
                 '2. Calibrate the Highway Comm Relay Dish on the Shattered Overpass',
@@ -365,6 +405,20 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
                 '7. Step Into the Stabilized Timeline Gateway to Mend Present Day'
               ].map((m, i) => (
                 <div key={i} style={{ padding: '0.5rem 0.75rem', background: 'rgba(112, 71, 255, 0.08)', borderLeft: '3px solid var(--color-purple)', borderRadius: 'var(--radius-xs)', fontSize: '0.82rem', color: '#FFFFFF' }}>
+                  {m}
+                </div>
+              ))
+            ) : (
+              [
+                '1. Arrival at the End of Time — Calibrate the Chrono Beacon',
+                '2. The Fallen Sky City — Activate the solid-light Phase Bridge',
+                '3. The Three Chrono Shards — Reclaim Genesis, Flux, and Singularity Shards',
+                '4. The Time Labyrinth — Synchronize the 3 temporal resonator switches',
+                '5. The Chronarch\'s Secret — Access archive terminal & uncover Chronarch lore',
+                '6. The Final Confrontation — Defeat THE CHRONARCH in the Timeline Engine Arena',
+                '7. The Fractured Future — Restore the Master Timeline Engine & save the universe'
+              ].map((m, i) => (
+                <div key={i} style={{ padding: '0.5rem 0.75rem', background: 'rgba(245, 185, 66, 0.08)', borderLeft: '3px solid var(--color-gold)', borderRadius: 'var(--radius-xs)', fontSize: '0.82rem', color: '#FFFFFF' }}>
                   {m}
                 </div>
               ))
@@ -428,6 +482,39 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
             <div>
               <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Temporal Stabilizer</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Repair the Central Time Core & save the Present. (+750 XP)</div>
+            </div>
+          </div>
+
+          {/* World 3 Achievements */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(0, 217, 255, 0.12)', border: '1px solid var(--border-cyan)', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#00D9FF" />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Sky City Ascendant</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Calibrate Chrono Beacon & cross solid-light Phase Bridge. (+200 XP)</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(245, 185, 66, 0.12)', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#F5B942" />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Chrono Shard Master</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Recover Genesis, Flux, and Singularity Chrono Shards. (+350 XP)</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(112, 71, 255, 0.12)', border: '1px solid var(--border-purple)', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#C084FC" />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Labyrinth Synchronizer</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Align all three resonator switches in the Time Labyrinth. (+400 XP)</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(239, 68, 68, 0.14)', border: '1px solid #EF4444', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#EF4444" />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Vanquisher of the Chronarch</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Defeat the Chronarch & restore the Master Timeline Engine. (+1000 XP)</div>
             </div>
           </div>
         </div>

@@ -12,11 +12,14 @@ export default function InventoryModal({ isOpen = false, onClose = () => {} }) {
 
   const state = GameState.getState();
   const isWorld2 = state.worldId === 'world_2';
+  const isWorld3 = state.worldId === 'world_3';
   const items = state.inventory?.items || [];
   const fragments = state.inventory?.fragmentsCollected || 0;
-  const cores = state.inventory?.coresCollected || 0;
+  const cores = state.inventory?.quantumCoresCollected || state.inventory?.coresCollected || 0;
+  const shards = state.inventory?.chronoShardsCollected || 0;
   const hasKeystone = state.inventory?.hasKeystone || false;
   const hasDecrypter = state.inventory?.hasDecrypter || state.mission?.currentStep > 1;
+  const hasBeacon = state.mission?.currentStep > 1;
 
   return (
     <div
@@ -53,10 +56,23 @@ export default function InventoryModal({ isOpen = false, onClose = () => {} }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
           <div>
             <h3 style={{ fontSize: '1.25rem', color: '#FFFFFF', fontWeight: 700 }}>
-              {isWorld2 ? 'Cyber Tech & Temporal Inventory' : 'Chrono Inventory'}
+              {isWorld3
+                ? 'Celestial & Chrono Artifacts'
+                : isWorld2
+                ? 'Cyber Tech & Temporal Inventory'
+                : 'Chrono Inventory'}
             </h3>
-            <span style={{ fontSize: '0.75rem', color: isWorld2 ? 'var(--color-purple)' : 'var(--color-cyan)' }}>
-              {isWorld2 ? 'Quantum Cores & Decryption Keys' : 'Artifacts & Temporal Fragments'}
+            <span
+              style={{
+                fontSize: '0.75rem',
+                color: isWorld3 ? 'var(--color-gold)' : isWorld2 ? 'var(--color-purple)' : 'var(--color-cyan)'
+              }}
+            >
+              {isWorld3
+                ? 'Chrono Shards & Master Archive Keys'
+                : isWorld2
+                ? 'Quantum Cores & Decryption Keys'
+                : 'Artifacts & Temporal Fragments'}
             </span>
           </div>
 
@@ -81,7 +97,106 @@ export default function InventoryModal({ isOpen = false, onClose = () => {} }) {
 
         {/* Items List */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', maxHeight: '360px', overflowY: 'auto' }}>
-          {isWorld2 ? (
+          {isWorld3 ? (
+            /* WORLD 3 ITEMS */
+            <>
+              {/* Chrono Beacon Telemetry Slot */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '1rem',
+                  padding: '0.85rem 1rem',
+                  background: hasBeacon ? 'rgba(245, 185, 66, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                  border: hasBeacon ? '1px solid var(--border-gold)' : '1px solid var(--border-subtle)',
+                  borderRadius: 'var(--radius-sm)',
+                  opacity: hasBeacon ? 1 : 0.5
+                }}
+              >
+                <div
+                  style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: 'var(--radius-xs)',
+                    background: hasBeacon ? 'linear-gradient(135deg, #F5B942, #B87800)' : 'rgba(255, 255, 255, 0.05)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#080B18',
+                    flexShrink: 0
+                  }}
+                >
+                  <Sparkles size={22} color={hasBeacon ? '#080B18' : 'var(--color-text-dim)'} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontWeight: 700, fontSize: '0.92rem', color: '#FFFFFF' }}>
+                      Chrono Beacon Telemetry
+                    </span>
+                    <Badge variant={hasBeacon ? 'gold' : 'neutral'} size="sm">
+                      {hasBeacon ? 'Calibrated' : 'Offline'}
+                    </Badge>
+                  </div>
+                  <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', margin: '0.35rem 0 0 0', lineHeight: 1.4 }}>
+                    {hasBeacon ? 'Synchronized with Landing Island. Revealing Chrono Shard signatures across the void.' : 'Calibrate at the arrival island beacon.'}
+                  </p>
+                </div>
+              </div>
+
+              {/* 3 Chrono Shards */}
+              {[
+                { id: 'shard_genesis', name: 'Chrono Shard of Genesis', loc: 'West Overlook Island', color: '#F5B942' },
+                { id: 'shard_flux', name: 'Chrono Shard of Flux', loc: 'East Anomaly Island', color: '#C084FC' },
+                { id: 'shard_singularity', name: 'Chrono Shard of Singularity', loc: 'Deep Bastion Island', color: '#00D9FF' }
+              ].map((s) => {
+                const isGathered = items.some((i) => i.id === s.id);
+                return (
+                  <div
+                    key={s.id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '1rem',
+                      padding: '0.85rem 1rem',
+                      background: isGathered ? 'rgba(245, 185, 66, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                      border: isGathered ? '1px solid var(--border-gold)' : '1px solid var(--border-subtle)',
+                      borderRadius: 'var(--radius-sm)',
+                      opacity: isGathered ? 1 : 0.5
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '42px',
+                        height: '42px',
+                        borderRadius: 'var(--radius-xs)',
+                        background: isGathered ? 'linear-gradient(135deg, #F5B942, #7047FF)' : 'rgba(255, 255, 255, 0.05)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#FFFFFF',
+                        flexShrink: 0
+                      }}
+                    >
+                      <Zap size={22} color={isGathered ? '#FFFFFF' : 'var(--color-text-dim)'} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontWeight: 700, fontSize: '0.92rem', color: '#FFFFFF' }}>
+                          {s.name}
+                        </span>
+                        <Badge variant={isGathered ? 'gold' : 'neutral'} size="sm">
+                          {isGathered ? 'Reclaimed' : 'Missing'}
+                        </Badge>
+                      </div>
+                      <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', margin: '0.35rem 0 0 0', lineHeight: 1.4 }}>
+                        {isGathered ? `Reclaimed from ${s.loc}. Timeline stasis resonance neutralized.` : `Located near ${s.loc}. Traverse floating bridges to claim.`}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          ) : isWorld2 ? (
             /* WORLD 2 ITEMS */
             <>
               {/* City Terminal Decrypter */}

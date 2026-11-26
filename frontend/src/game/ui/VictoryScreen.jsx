@@ -15,7 +15,9 @@ import AudioSystem from '../systems/AudioSystem';
 export default function VictoryScreen({ worldId = 'world_1', onFreeRoam = () => {} }) {
   const navigate = useNavigate();
   const state = GameState.getState();
-  const isWorld2 = worldId === 'world_2' || state.worldId === 'world_2';
+  const activeWorld = worldId || state.worldId;
+  const isWorld3 = activeWorld === 'world_3';
+  const isWorld2 = activeWorld === 'world_2';
 
   const handleDashboard = () => {
     AudioSystem.playInteract();
@@ -56,8 +58,8 @@ export default function VictoryScreen({ worldId = 'world_1', onFreeRoam = () => 
           <Logo size="md" glow={true} showTagline={false} />
         </div>
 
-        <Badge variant={isWorld2 ? 'purple' : 'gold'} size="md" pulse={true} style={{ marginBottom: '0.75rem' }}>
-          {isWorld2 ? 'World 2 Restored' : 'World 1 Restored'}
+        <Badge variant={isWorld3 ? 'gold' : isWorld2 ? 'purple' : 'gold'} size="md" pulse={true} style={{ marginBottom: '0.75rem' }}>
+          {isWorld3 ? 'World 3 Restored' : isWorld2 ? 'World 2 Restored' : 'World 1 Restored'}
         </Badge>
 
         <h1
@@ -68,11 +70,17 @@ export default function VictoryScreen({ worldId = 'world_1', onFreeRoam = () => 
             letterSpacing: '0.04em'
           }}
         >
-          {isWorld2 ? 'CENTRAL TIME CORE REPAIRED!' : 'TIMELINE PORTAL AWAKENED!'}
+          {isWorld3
+            ? 'THE CHRONARCH DEFEATED!'
+            : isWorld2
+            ? 'CENTRAL TIME CORE REPAIRED!'
+            : 'TIMELINE PORTAL AWAKENED!'}
         </h1>
 
         <p style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginBottom: '1.75rem', lineHeight: 1.5 }}>
-          {isWorld2
+          {isWorld3
+            ? 'You have shattered the Chronarch’s temporal stasis field, reclaimed all three Chrono Shards, and stabilized the Master Timeline Engine at the End of Time.'
+            : isWorld2
             ? 'You have stabilized the Broken Present metropolis, recovered all 3 Quantum Cores, synchronized the zero-point phase matrix, and awakened the next timeline gateway.'
             : 'You have mastered the Chrono Keystone, collected the three ancient fragments, aligned the dials, and unlocked the gateway through time.'}
         </p>
@@ -89,15 +97,15 @@ export default function VictoryScreen({ worldId = 'world_1', onFreeRoam = () => 
           <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
             <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>XP Awarded</div>
             <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--color-gold)', marginTop: '2px' }}>
-              {isWorld2 ? '+750' : '+500'}
+              {isWorld3 ? '+1000' : isWorld2 ? '+750' : '+500'}
             </div>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
             <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
-              {isWorld2 ? 'Quantum Cores' : 'Fragments'}
+              {isWorld3 ? 'Chrono Shards' : isWorld2 ? 'Quantum Cores' : 'Fragments'}
             </div>
-            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: isWorld2 ? '#C084FC' : 'var(--color-cyan)', marginTop: '2px' }}>
+            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: isWorld3 ? 'var(--color-gold)' : isWorld2 ? '#C084FC' : 'var(--color-cyan)', marginTop: '2px' }}>
               3 / 3
             </div>
           </div>
@@ -111,7 +119,7 @@ export default function VictoryScreen({ worldId = 'world_1', onFreeRoam = () => 
         {/* Action Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <Button
-            variant={isWorld2 ? 'purple' : 'gold'}
+            variant={isWorld3 ? 'gold' : isWorld2 ? 'purple' : 'gold'}
             fullWidth
             size="lg"
             icon={ArrowRight}
@@ -128,7 +136,7 @@ export default function VictoryScreen({ worldId = 'world_1', onFreeRoam = () => 
             icon={RotateCcw}
             onClick={onFreeRoam}
           >
-            Explore {isWorld2 ? 'World 2' : 'World 1'} in Free Roam
+            Explore {isWorld3 ? 'World 3' : isWorld2 ? 'World 2' : 'World 1'} in Free Roam
           </Button>
         </div>
       </div>

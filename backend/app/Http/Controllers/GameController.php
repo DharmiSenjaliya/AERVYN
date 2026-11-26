@@ -16,15 +16,29 @@ class GameController extends Controller
         $user = $request->user();
         $worldId = $request->query('world', 'world_1');
 
+        $defaultMission = 'Awakening the Keystone';
+        $defaultCheckpoint = 'start_courtyard';
+        $defaultPos = ['x' => 0, 'y' => 1, 'z' => 6];
+
+        if ($worldId === 'world_2') {
+            $defaultMission = 'The Broken Present';
+            $defaultCheckpoint = 'highway_overlook';
+            $defaultPos = ['x' => 0, 'y' => 1, 'z' => 12];
+        } elseif ($worldId === 'world_3') {
+            $defaultMission = 'Arrival at the End of Time';
+            $defaultCheckpoint = 'world_3_arrival';
+            $defaultPos = ['x' => 0, 'y' => 2, 'z' => 24];
+        }
+
         $progress = PlayerProgress::firstOrCreate(
             ['user_id' => $user->id, 'world_id' => $worldId],
             [
-                'current_mission' => 'Awakening the Keystone',
+                'current_mission' => $defaultMission,
                 'current_step' => 1,
                 'completed_objectives' => [],
                 'inventory' => [],
-                'checkpoint_id' => 'start_courtyard',
-                'checkpoint_position' => ['x' => 0, 'y' => 1, 'z' => 6],
+                'checkpoint_id' => $defaultCheckpoint,
+                'checkpoint_position' => $defaultPos,
                 'is_completed' => false,
                 'playtime_seconds' => 0,
             ]
@@ -149,7 +163,7 @@ class GameController extends Controller
     }
 
     /**
-     * Complete World 1 & grant XP securely
+     * Complete World & grant XP securely
      */
     public function completeWorld(Request $request)
     {
@@ -164,20 +178,27 @@ class GameController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Progress record not found.'], 404);
         }
 
-        // Server-side validation: must have completed at least step 9 (puzzle/portal)
-        if ($progress->current_step < 9) {
+        // Server-side validation: must have completed core timeline step before victory
+        $minStep = ($worldId === 'world_1') ? 9 : 6;
+        if ($progress->current_step < $minStep) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Cannot complete world before activating the time portal.',
+                'message' => 'Cannot complete world before fulfilling core timeline objectives.',
             ], 422);
         }
 
-        $progress->current_step = 10;
+        $maxStep = ($worldId === 'world_1') ? 10 : 7;
+        $progress->current_step = $maxStep;
         $progress->is_completed = true;
         $progress->save();
 
-        // Award XP and calculate ascension level
-        $xpReward = 500;
+        // Award XP and calculate ascension level based on world difficulty
+        $xpRewards = [
+            'world_1' => 500,
+            'world_2' => 750,
+            'world_3' => 1000,
+        ];
+        $xpReward = $xpRewards[$worldId] ?? 500;
         $user->xp += $xpReward;
         if ($user->xp >= $user->level * 500) {
             $user->level += 1;
@@ -198,9 +219,16 @@ class GameController extends Controller
             $session->save();
         }
 
+        $messages = [
+            'world_1' => 'World 1: The Lost Kingdom restored! Timeline portal stabilized.',
+            'world_2' => 'World 2: The Broken Present restored! Central Time Core repaired.',
+            'world_3' => 'World 3: The Fractured Future restored! The Chronarch defeated and Timeline Engine stabilized.',
+        ];
+        $msg = $messages[$worldId] ?? 'Timeline successfully restored!';
+
         return response()->json([
             'status' => 'success',
-            'message' => 'World 1: The Lost Kingdom restored! Timeline portal stabilized.',
+            'message' => $msg,
             'xp_awarded' => $xpReward,
             'new_level' => $user->level,
             'total_xp' => $user->xp,
@@ -220,12 +248,23 @@ class GameController extends Controller
             ->where('world_id', $worldId)
             ->first();
 
+        $defaultCp = 'start_courtyard';
+        $defaultPos = ['x' => 0, 'y' => 1, 'z' => 6];
+
+        if ($worldId === 'world_2') {
+            $defaultCp = 'highway_overlook';
+            $defaultPos = ['x' => 0, 'y' => 1, 'z' => 12];
+        } elseif ($worldId === 'world_3') {
+            $defaultCp = 'world_3_arrival';
+            $defaultPos = ['x' => 0, 'y' => 2, 'z' => 24];
+        }
+
         if ($progress) {
             $progress->current_step = 1;
             $progress->completed_objectives = [];
             $progress->inventory = [];
-            $progress->checkpoint_id = 'start_courtyard';
-            $progress->checkpoint_position = ['x' => 0, 'y' => 1, 'z' => 6];
+            $progress->checkpoint_id = $defaultCp;
+            $progress->checkpoint_position = $defaultPos;
             $progress->is_completed = false;
             $progress->save();
         }

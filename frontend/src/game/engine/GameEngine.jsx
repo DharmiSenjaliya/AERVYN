@@ -4,6 +4,7 @@ import DesktopControls from '../controls/DesktopControls';
 import MobileControls from '../controls/MobileControls';
 import LostKingdomScene from '../scenes/LostKingdomScene';
 import BrokenPresentScene from '../scenes/BrokenPresentScene';
+import FracturedFutureScene from '../scenes/FracturedFutureScene';
 import MainMenuScene from '../scenes/MainMenuScene';
 import GameHUD from '../ui/GameHUD';
 import PauseMenu from '../ui/PauseMenu';
@@ -123,7 +124,9 @@ export default function GameEngine() {
       {(currentScene === 'playing' || currentScene === 'paused' || currentScene === 'victory' || currentScene === 'gameover') && (
         <>
           {/* Active World 3D Canvas Scene */}
-          {worldId === 'world_2' ? (
+          {worldId === 'world_3' ? (
+            <FracturedFutureScene mobileInput={mobileInput} />
+          ) : worldId === 'world_2' ? (
             <BrokenPresentScene mobileInput={mobileInput} />
           ) : (
             <LostKingdomScene mobileInput={mobileInput} />

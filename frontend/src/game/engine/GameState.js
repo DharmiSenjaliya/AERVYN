@@ -58,6 +58,29 @@ class GameStateManager {
             7: 'Mission 7: World Completion — Step through the stabilized temporal gateway!'
           }
         }
+      },
+      world_3: {
+        id: 'world_3',
+        name: 'World 3: The Fractured Future',
+        spawn: [0, 2, 24],
+        checkpoint: { id: 'end_of_time_landing', name: 'Landing Sky Island', position: [0, 2, 24] },
+        mission: {
+          id: 'mission_3',
+          title: 'The Fractured Future',
+          currentStep: 1,
+          totalSteps: 7,
+          currentObjective: 'Mission 1: Arrival at the End of Time — Locate and calibrate the Chrono Beacon [E].',
+          completedObjectives: [],
+          stepDescriptions: {
+            1: 'Mission 1: Arrival at the End of Time — Locate and calibrate the Chrono Beacon [E].',
+            2: 'Mission 2: The Fallen Sky City — Cross the sky bridge and activate the Phase Bridge Terminal [E].',
+            3: 'Mission 3: The Three Chrono Shards — Recover 3 Chrono Shards across the floating islands (0/3).',
+            4: 'Mission 4: The Time Labyrinth — Solve the 3 temporal resonator switches to open the Spire Gate.',
+            5: 'Mission 5: The Chronarch\'s Secret — Access the Chrono Archive Terminal inside the Research Spire.',
+            6: 'Mission 6: The Final Confrontation — Defeat THE CHRONARCH in the Timeline Engine Arena!',
+            7: 'Mission 7: The Fractured Future — Restore the Master Timeline Engine to seal the cosmic fracture!'
+          }
+        }
       }
     };
 
@@ -88,7 +111,18 @@ class GameStateManager {
         items: [],
         fragmentsCollected: 0,
         hasKeystone: false,
-        quantumCoresCollected: 0
+        quantumCoresCollected: 0,
+        chronoShardsCollected: 0
+      },
+
+      boss: {
+        active: false,
+        name: 'THE CHRONARCH',
+        subtitle: 'Architect of Temporal Stasis',
+        health: 100,
+        maxHealth: 100,
+        phase: 1,
+        isVulnerable: false
       },
 
       objects: {
@@ -105,7 +139,17 @@ class GameStateManager {
         labBulkheadUnlocked: false,
         phasePuzzleSolved: false,
         timeCoreRepaired: false,
-        world2GatewayActive: false
+        world2GatewayActive: false,
+
+        // World 3
+        beaconCalibrated: false,
+        phaseBridgeActive: false,
+        labyrinthSwitches: { alpha: false, beta: false, gamma: false },
+        labyrinthSolved: false,
+        archiveTerminalAccessed: false,
+        bossArenaUnlocked: false,
+        bossDefeated: false,
+        timelineEngineRestored: false
       },
 
       checkpoint: { ...cfg.checkpoint },
@@ -245,6 +289,104 @@ class GameStateManager {
     }
   }
 
+  // World 3: Collect Chrono Shard
+  collectChronoShard(shardId, name) {
+    const existing = this.state.inventory.items.find((item) => item.id === shardId);
+    if (!existing) {
+      const items = [...this.state.inventory.items, { id: shardId, name, type: 'chrono_shard' }];
+      const count = items.filter((i) => i.type === 'chrono_shard').length;
+
+      this.setState({
+        inventory: {
+          ...this.state.inventory,
+          items,
+          chronoShardsCollected: count
+        }
+      });
+
+      if (count >= 3 && this.state.mission.currentStep === 3) {
+        this.advanceStep(4);
+      } else if (count > 0 && this.state.mission.currentStep === 3) {
+        this.state.mission.currentObjective = `Mission 3: The Three Chrono Shards — Recover 3 Chrono Shards (${count}/3).`;
+        this.notify();
+      }
+    }
+  }
+
+  // World 3: Labyrinth Switch Toggle
+  setLabyrinthSwitch(switchKey, active = true) {
+    const updatedSwitches = {
+      ...this.state.objects.labyrinthSwitches,
+      [switchKey]: active
+    };
+    const allActive = updatedSwitches.alpha && updatedSwitches.beta && updatedSwitches.gamma;
+
+    this.setState({
+      objects: {
+        ...this.state.objects,
+        labyrinthSwitches: updatedSwitches,
+        labyrinthSolved: allActive
+      }
+    });
+
+    if (allActive && this.state.mission.currentStep === 4) {
+      this.advanceStep(5);
+    }
+  }
+
+  // World 3: Boss Combat State
+  setBossActive(active = true) {
+    this.setState({
+      boss: {
+        ...this.state.boss,
+        active
+      }
+    });
+  }
+
+  setBossVulnerable(isVulnerable = true) {
+    this.setState({
+      boss: {
+        ...this.state.boss,
+        isVulnerable
+      }
+    });
+  }
+
+  damageBoss(amount) {
+    if (!this.state.boss.active) return;
+    const currentHp = this.state.boss.health;
+    const newHp = Math.max(0, currentHp - amount);
+
+    let nextPhase = 1;
+    if (newHp <= 30) nextPhase = 3;
+    else if (newHp <= 65) nextPhase = 2;
+
+    this.setState({
+      boss: {
+        ...this.state.boss,
+        health: newHp,
+        phase: nextPhase
+      }
+    });
+
+    if (newHp <= 0) {
+      this.setState({
+        boss: {
+          ...this.state.boss,
+          health: 0,
+          active: false
+        },
+        objects: {
+          ...this.state.objects,
+          bossDefeated: true
+        }
+      });
+      AudioSystem.playVictory();
+      this.advanceStep(7);
+    }
+  }
+
   // Advance step for current active mission
   advanceStep(stepNumber) {
     if (stepNumber > this.state.mission.currentStep) {
@@ -292,7 +434,17 @@ class GameStateManager {
         items: [],
         fragmentsCollected: 0,
         hasKeystone: false,
-        quantumCoresCollected: 0
+        quantumCoresCollected: 0,
+        chronoShardsCollected: 0
+      },
+      boss: {
+        active: false,
+        name: 'THE CHRONARCH',
+        subtitle: 'Architect of Temporal Stasis',
+        health: 100,
+        maxHealth: 100,
+        phase: 1,
+        isVulnerable: false
       },
       objects: {
         doorUnlocked: false,
@@ -305,7 +457,15 @@ class GameStateManager {
         labBulkheadUnlocked: false,
         phasePuzzleSolved: false,
         timeCoreRepaired: false,
-        world2GatewayActive: false
+        world2GatewayActive: false,
+        beaconCalibrated: false,
+        phaseBridgeActive: false,
+        labyrinthSwitches: { alpha: false, beta: false, gamma: false },
+        labyrinthSolved: false,
+        archiveTerminalAccessed: false,
+        bossArenaUnlocked: false,
+        bossDefeated: false,
+        timelineEngineRestored: false
       },
       interactionPrompt: null
     });

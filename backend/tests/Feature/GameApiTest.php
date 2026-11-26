@@ -63,4 +63,41 @@ class GameApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonPath('status', 'success');
     }
+
+    public function test_authenticated_player_can_get_world_3_state()
+    {
+        $user = User::where('email', 'player@aervyn.local')->first();
+
+        $response = $this->actingAs($user, 'sanctum')
+            ->getJson('/api/game/state?world=world_3');
+
+        $response->assertStatus(200)
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('progress.world_id', 'world_3')
+            ->assertJsonPath('progress.current_mission', 'Arrival at the End of Time');
+    }
+
+    public function test_authenticated_player_can_complete_world_3()
+    {
+        $user = User::where('email', 'player@aervyn.local')->first();
+
+        // Advance to step 6 (boss battle phase)
+        $this->actingAs($user, 'sanctum')
+            ->postJson('/api/game/save', [
+                'world_id' => 'world_3',
+                'current_step' => 6,
+                'inventory' => ['shard_genesis', 'shard_flux', 'shard_singularity'],
+            ]);
+
+        // Complete World 3 after defeating Chronarch
+        $response = $this->actingAs($user, 'sanctum')
+            ->postJson('/api/game/complete-world', [
+                'world_id' => 'world_3',
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('status', 'success')
+            ->assertJsonPath('xp_awarded', 1000)
+            ->assertJsonPath('progress.is_completed', true);
+    }
 }

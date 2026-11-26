@@ -24,6 +24,7 @@ class DesktopControlsManager {
     this.onKeyDown = this.handleKeyDown.bind(this);
     this.onKeyUp = this.handleKeyUp.bind(this);
     this.onMouseMove = this.handleMouseMove.bind(this);
+    this.onMouseDown = this.handleMouseDown.bind(this);
   }
 
   init() {
@@ -31,6 +32,7 @@ class DesktopControlsManager {
     window.addEventListener('keydown', this.onKeyDown);
     window.addEventListener('keyup', this.onKeyUp);
     window.addEventListener('mousemove', this.onMouseMove);
+    window.addEventListener('mousedown', this.onMouseDown);
     this.initialized = true;
   }
 
@@ -38,6 +40,7 @@ class DesktopControlsManager {
     window.removeEventListener('keydown', this.onKeyDown);
     window.removeEventListener('keyup', this.onKeyUp);
     window.removeEventListener('mousemove', this.onMouseMove);
+    window.removeEventListener('mousedown', this.onMouseDown);
     this.initialized = false;
   }
 
@@ -72,6 +75,11 @@ class DesktopControlsManager {
       InteractionSystem.trigger();
     }
 
+    // Chrono Strike / Attack trigger [F]
+    if (key === 'f') {
+      window.dispatchEvent(new CustomEvent('aervyn:player-attack'));
+    }
+
     // Inventory toggle [I]
     if (key === 'i') {
       window.dispatchEvent(new CustomEvent('aervyn:toggle-inventory'));
@@ -80,6 +88,15 @@ class DesktopControlsManager {
     // Pause toggle [ESC]
     if (e.key === 'Escape') {
       GameState.setScene('paused');
+    }
+  }
+
+  handleMouseDown(e) {
+    if (GameState.getState().currentScene === 'playing' && e.button === 0) {
+      // Don't trigger if clicking on HUD buttons or modals
+      if (!e.target.closest('button') && !e.target.closest('.glass-panel')) {
+        window.dispatchEvent(new CustomEvent('aervyn:player-attack'));
+      }
     }
   }
 
