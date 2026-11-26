@@ -89,7 +89,8 @@ class AdminAnalyticsController extends Controller
         $itemTally = [];
         foreach ($allProgress as $prog) {
             if (is_array($prog->inventory)) {
-                foreach ($prog->inventory as $itemId) {
+                foreach ($prog->inventory as $item) {
+                    $itemId = is_array($item) ? ($item['id'] ?? 'item') : (string)$item;
                     $itemTally[$itemId] = ($itemTally[$itemId] ?? 0) + 1;
                 }
             }

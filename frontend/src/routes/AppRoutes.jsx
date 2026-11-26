@@ -15,6 +15,10 @@ import AdminLoginPage from '../pages/auth/AdminLoginPage';
 
 // Player Pages
 import DashboardPage from '../pages/player/DashboardPage';
+import ProfilePage from '../pages/player/ProfilePage';
+import StatisticsPage from '../pages/player/StatisticsPage';
+import AchievementsPage from '../pages/player/AchievementsPage';
+import LeaderboardPage from '../pages/player/LeaderboardPage';
 
 // Admin Pages
 import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
@@ -79,11 +83,14 @@ export default function AppRoutes() {
       >
         <Route index element={<Navigate to="/player/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="missions" element={<DashboardPage />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="statistics" element={<StatisticsPage />} />
+        <Route path="achievements" element={<AchievementsPage />} />
+        <Route path="leaderboard" element={<LeaderboardPage />} />
+        <Route path="settings" element={<ProfilePage />} />
+        <Route path="missions" element={<StatisticsPage />} />
         <Route path="worlds" element={<DashboardPage />} />
-        <Route path="inventory" element={<DashboardPage />} />
-        <Route path="achievements" element={<DashboardPage />} />
-        <Route path="settings" element={<DashboardPage />} />
+        <Route path="inventory" element={<StatisticsPage />} />
       </Route>
 
       {/* 4. Professional Admin Panel */}

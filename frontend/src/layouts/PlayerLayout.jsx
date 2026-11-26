@@ -14,7 +14,9 @@ import {
   Zap,
   Shield,
   Menu,
-  X
+  X,
+  Trophy,
+  BarChart3
 } from 'lucide-react';
 import Logo from '../components/common/Logo';
 import Button from '../components/common/Button';
@@ -50,11 +52,10 @@ export default function PlayerLayout() {
 
   const navItems = [
     { label: 'Dashboard', path: '/player/dashboard', icon: Compass },
-    { label: 'Missions', path: '/player/missions', icon: Scroll },
-    { label: 'Worlds', path: '/player/worlds', icon: Globe },
-    { label: 'Inventory', path: '/player/inventory', icon: Backpack },
+    { label: 'Profile', path: '/player/profile', icon: User },
     { label: 'Achievements', path: '/player/achievements', icon: Award },
-    { label: 'Settings', path: '/player/settings', icon: Settings }
+    { label: 'Statistics', path: '/player/statistics', icon: BarChart3 },
+    { label: 'Leaderboard', path: '/player/leaderboard', icon: Trophy }
   ];
 
   const handleLogout = async () => {
@@ -237,7 +238,7 @@ export default function PlayerLayout() {
                     <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{user?.email || 'player@aervyn.local'}</div>
                   </div>
                   <Link
-                    to="/player/settings"
+                    to="/player/profile"
                     onClick={() => { playClick(); setProfileDropdownOpen(false); }}
                     style={{
                       display: 'flex',
@@ -249,8 +250,24 @@ export default function PlayerLayout() {
                       fontSize: '0.82rem'
                     }}
                   >
-                    <Settings size={15} />
-                    <span>Account Settings</span>
+                    <User size={15} />
+                    <span>Explorer Profile</span>
+                  </Link>
+                  <Link
+                    to="/player/statistics"
+                    onClick={() => { playClick(); setProfileDropdownOpen(false); }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.6rem',
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: 'var(--radius-xs)',
+                      color: 'var(--color-text)',
+                      fontSize: '0.82rem'
+                    }}
+                  >
+                    <BarChart3 size={15} />
+                    <span>Game Statistics</span>
                   </Link>
                   <button
                     onClick={handleLogout}

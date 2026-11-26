@@ -13,9 +13,13 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'display_name',
         'email',
         'password',
         'role',
+        'avatar',
+        'bio',
+        'title',
         'level',
         'xp',
         'is_active',
@@ -64,6 +68,18 @@ class User extends Authenticatable
     public function activityLogs()
     {
         return $this->hasMany(AdminActivityLog::class, 'admin_id');
+    }
+
+    public function userAchievements()
+    {
+        return $this->hasMany(UserAchievement::class, 'user_id');
+    }
+
+    public function achievements()
+    {
+        return $this->belongsToMany(Achievement::class, 'user_achievements', 'user_id', 'achievement_id')
+            ->withPivot('unlocked_at', 'xp_awarded')
+            ->withTimestamps();
     }
 
     public function isAdmin(): bool

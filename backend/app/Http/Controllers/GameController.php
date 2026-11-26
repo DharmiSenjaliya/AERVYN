@@ -145,10 +145,13 @@ class GameController extends Controller
 
         $progress->save();
 
+        $newAchievements = \App\Services\AchievementService::syncForUser($user);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Temporal progress saved to database.',
             'progress' => $progress,
+            'new_achievements' => $newAchievements,
         ]);
     }
 
@@ -228,11 +231,8 @@ class GameController extends Controller
             'world_final' => 1500,
         ];
         $xpReward = $xpRewards[$worldId] ?? 500;
-        $user->xp += $xpReward;
-        if ($user->xp >= $user->level * 500) {
-            $user->level += 1;
-        }
-        $user->save();
+        \App\Services\PlayerProgressionService::awardXp($user, $xpReward, "World Completed: {$worldId}");
+        $newAchievements = \App\Services\AchievementService::syncForUser($user);
 
         // Complete session
         $session = GameSession::where('user_id', $user->id)
@@ -262,6 +262,7 @@ class GameController extends Controller
             'xp_awarded' => $xpReward,
             'new_level' => $user->level,
             'total_xp' => $user->xp,
+            'new_achievements' => $newAchievements,
             'progress' => $progress,
         ]);
     }

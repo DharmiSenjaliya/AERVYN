@@ -16,6 +16,11 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminActivityLogController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminMediaController;
+use App\Http\Controllers\Player\PlayerDashboardController;
+use App\Http\Controllers\Player\PlayerProfileController;
+use App\Http\Controllers\Player\PlayerAchievementController;
+use App\Http\Controllers\Player\PlayerStatisticsController;
+use App\Http\Controllers\Player\PlayerLeaderboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +49,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/checkpoint', [GameController::class, 'reachCheckpoint']);
         Route::post('/complete-world', [GameController::class, 'completeWorld']);
         Route::post('/reset', [GameController::class, 'resetRun']);
+    });
+
+    // Player Dashboard, Profile, Achievements & Leaderboard
+    Route::prefix('player')->group(function () {
+        Route::get('/dashboard', [PlayerDashboardController::class, 'dashboard']);
+        Route::get('/profile', [PlayerProfileController::class, 'show']);
+        Route::put('/profile', [PlayerProfileController::class, 'update']);
+        Route::post('/change-password', [PlayerProfileController::class, 'changePassword']);
+        Route::get('/statistics', [PlayerStatisticsController::class, 'index']);
+        Route::get('/achievements', [PlayerAchievementController::class, 'index']);
+        Route::post('/achievements/check', [PlayerAchievementController::class, 'check']);
+        Route::get('/leaderboard', [PlayerLeaderboardController::class, 'index']);
     });
 
     // Professional Admin Panel Endpoints (Admin Guard)
