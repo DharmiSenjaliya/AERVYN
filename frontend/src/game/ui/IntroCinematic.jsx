@@ -6,8 +6,10 @@ import AudioSystem from '../systems/AudioSystem';
  * Cinematic Introduction Cutscene Overlay
  * 21:9 Letterbox format, lore introduction prologue, and skip button.
  */
-export default function IntroCinematic({ onComplete = () => {} }) {
+export default function IntroCinematic({ worldId = 'world_1', onComplete = () => {} }) {
   const [fadeStage, setFadeStage] = useState(0); // 0: Title, 1: Lore, 2: Call to Action
+
+  const isWorld2 = worldId === 'world_2';
 
   useEffect(() => {
     AudioSystem.startAmbience();
@@ -78,11 +80,11 @@ export default function IntroCinematic({ onComplete = () => {} }) {
                 fontSize: '0.85rem',
                 letterSpacing: '0.3em',
                 textTransform: 'uppercase',
-                color: 'var(--color-cyan)',
+                color: isWorld2 ? 'var(--color-purple)' : 'var(--color-cyan)',
                 fontWeight: 700
               }}
             >
-              YEAR -840 &bull; PAST ERA
+              {isWorld2 ? 'YEAR 2026 \u2022 PRESENT ERA' : 'YEAR -840 \u2022 PAST ERA'}
             </span>
             <h1
               style={{
@@ -92,7 +94,7 @@ export default function IntroCinematic({ onComplete = () => {} }) {
                 letterSpacing: '0.08em'
               }}
             >
-              THE LOST KINGDOM
+              {isWorld2 ? 'THE BROKEN PRESENT' : 'THE LOST KINGDOM'}
             </h1>
           </div>
         )}
@@ -107,7 +109,9 @@ export default function IntroCinematic({ onComplete = () => {} }) {
                 margin: 0
               }}
             >
-              Before the cataclysmic temporal fracture, the ancient castle stood as the cradle of the <em>Chrono Keystone</em>.
+              {isWorld2
+                ? 'Emerging through the portal, the world of 2026 is shattered. Time distortions suspend skyscrapers mid-collapse, and security drones guard the ruins.'
+                : 'Before the cataclysmic temporal fracture, the ancient castle stood as the cradle of the Chrono Keystone.'}
             </p>
           </div>
         )}
@@ -123,7 +127,9 @@ export default function IntroCinematic({ onComplete = () => {} }) {
                 margin: 0
               }}
             >
-              Discover the ancient device. Collect the three scattered energy fragments. Restore the first timeline gateway.
+              {isWorld2
+                ? 'Investigate the city. Reclaim the 3 Quantum Energy Cores, breach the underground research lab, and repair the Central Time Core.'
+                : 'Discover the ancient device. Collect the three scattered energy fragments. Restore the first timeline gateway.'}
             </p>
           </div>
         )}

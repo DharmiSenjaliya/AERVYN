@@ -28,7 +28,15 @@ import SaveSystem from '../systems/SaveSystem';
 export default function MainMenuScene({ onStartGame = () => {}, onContinueGame = () => {} }) {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(null); // 'worlds' | 'missions' | 'achievements' | 'settings' | 'credits'
+  const [missionWorldTab, setMissionWorldTab] = useState('world_1');
   const [muted, setMuted] = useState(false);
+
+  const handleSelectWorld = (worldId) => {
+    AudioSystem.playPortalActivate();
+    GameState.setWorld(worldId);
+    setModalOpen(null);
+    onStartGame();
+  };
 
   const handleNewGame = () => {
     AudioSystem.playPortalActivate();
@@ -199,30 +207,87 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
         isOpen={modalOpen === 'worlds'}
         onClose={() => setModalOpen(null)}
         title="Timeline World Matrix"
-        maxWidth="500px"
+        maxWidth="520px"
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-          <div style={{ padding: '0.85rem', background: 'rgba(22, 140, 255, 0.15)', border: '1px solid var(--border-cyan)', borderRadius: 'var(--radius-sm)' }}>
-            <div style={{ fontWeight: 700, color: '#FFFFFF' }}>World 1: The Lost Kingdom</div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--color-cyan)' }}>Current Playable World &bull; Past Era</div>
-            <p style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)', margin: '0.4rem 0 0 0' }}>
-              Ancient castle ruins, stone pathways, energy fragments, and the first time portal.
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.95rem' }}>
+          {/* World 1 Card */}
+          <div
+            style={{
+              padding: '1rem',
+              background: 'rgba(22, 140, 255, 0.12)',
+              border: '1px solid var(--border-cyan)',
+              borderRadius: 'var(--radius-sm)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.4rem'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#FFFFFF' }}>World 1: The Lost Kingdom</div>
+              <span style={{ fontSize: '0.72rem', color: 'var(--color-cyan)', fontWeight: 700 }}>PAST ERA</span>
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', margin: 0, lineHeight: 1.4 }}>
+              Ancient castle courtyard, stone pathways, 3 energy fragments, alignment puzzle, and time portal dais.
             </p>
+            <div style={{ marginTop: '0.4rem' }}>
+              <Button
+                variant="cyan"
+                size="sm"
+                fullWidth
+                icon={Play}
+                onClick={() => handleSelectWorld('world_1')}
+              >
+                Launch World 1 (Past)
+              </Button>
+            </div>
           </div>
 
-          <div style={{ padding: '0.85rem', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', opacity: 0.65 }}>
-            <div style={{ fontWeight: 700, color: '#FFFFFF' }}>World 2: The Broken Present</div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--color-text-dim)' }}>Locked &bull; Present Era</div>
+          {/* World 2 Card */}
+          <div
+            style={{
+              padding: '1rem',
+              background: 'rgba(112, 71, 255, 0.14)',
+              border: '1px solid var(--border-purple)',
+              borderRadius: 'var(--radius-sm)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.4rem'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#FFFFFF' }}>World 2: The Broken Present</div>
+              <span style={{ fontSize: '0.72rem', color: 'var(--color-purple)', fontWeight: 700 }}>PRESENT ERA (2026)</span>
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', margin: 0, lineHeight: 1.4 }}>
+              Destroyed futuristic city, cracked highways, 3 Quantum Cores, underground research lab, and the Central Time Core.
+            </p>
+            <div style={{ marginTop: '0.4rem' }}>
+              <Button
+                variant="purple"
+                size="sm"
+                fullWidth
+                icon={Play}
+                onClick={() => handleSelectWorld('world_2')}
+              >
+                Launch World 2 (Present)
+              </Button>
+            </div>
           </div>
 
-          <div style={{ padding: '0.85rem', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', opacity: 0.65 }}>
-            <div style={{ fontWeight: 700, color: '#FFFFFF' }}>World 3: The Future Collapse</div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--color-text-dim)' }}>Locked &bull; Future Era</div>
+          {/* World 3 Card (Locked) */}
+          <div style={{ padding: '0.85rem 1rem', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', opacity: 0.55 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '0.88rem' }}>World 3: The Future Collapse</span>
+              <span style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)' }}>LOCKED &bull; FUTURE</span>
+            </div>
           </div>
 
-          <div style={{ padding: '0.85rem', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', opacity: 0.65 }}>
-            <div style={{ fontWeight: 700, color: '#FFFFFF' }}>World 4: The Forgotten Timeline</div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--color-text-dim)' }}>Locked &bull; Zero Horizon</div>
+          {/* World 4 Card (Locked) */}
+          <div style={{ padding: '0.85rem 1rem', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', opacity: 0.55 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '0.88rem' }}>World 4: The Forgotten Timeline</span>
+              <span style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)' }}>LOCKED &bull; ZERO HORIZON</span>
+            </div>
           </div>
         </div>
       </Modal>
@@ -231,26 +296,80 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
       <Modal
         isOpen={modalOpen === 'missions'}
         onClose={() => setModalOpen(null)}
-        title="Story Missions (10 Objectives)"
-        maxWidth="520px"
+        title="Story Missions Matrix"
+        maxWidth="540px"
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-          {[
-            '1. Arrive at the Lost Kingdom Castle Courtyard',
-            '2. Master Character Locomotion, Sprint, and Jump',
-            '3. Discover the Ancient Pedestal & Altar',
-            '4. Claim the Chrono Keystone Artifact',
-            '5. Search the Ruins for 3 Temporal Energy Fragments',
-            '6. Uncover Hidden Ruins along Eastern and Western Colonnades',
-            '7. Channel Energy Fragments into the Ancient Stone Gate',
-            '8. Solve the Chrono Alignment Dial Mechanism',
-            '9. Activate the Central Time Portal Dais',
-            '10. Leap Through the Active Portal to Restore the Continuum'
-          ].map((m, i) => (
-            <div key={i} style={{ padding: '0.5rem 0.75rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-xs)', fontSize: '0.82rem', color: i < 5 ? '#FFFFFF' : 'var(--color-text-muted)' }}>
-              {m}
-            </div>
-          ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {/* World Tabs */}
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.25rem' }}>
+            <button
+              onClick={() => setMissionWorldTab('world_1')}
+              style={{
+                flex: 1,
+                padding: '0.45rem',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                borderRadius: 'var(--radius-xs)',
+                border: missionWorldTab === 'world_1' ? '1px solid var(--border-cyan)' : '1px solid var(--border-subtle)',
+                background: missionWorldTab === 'world_1' ? 'rgba(0, 217, 255, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                color: missionWorldTab === 'world_1' ? '#FFFFFF' : 'var(--color-text-dim)',
+                cursor: 'pointer'
+              }}
+            >
+              World 1: Lost Kingdom (10)
+            </button>
+            <button
+              onClick={() => setMissionWorldTab('world_2')}
+              style={{
+                flex: 1,
+                padding: '0.45rem',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                borderRadius: 'var(--radius-xs)',
+                border: missionWorldTab === 'world_2' ? '1px solid var(--border-purple)' : '1px solid var(--border-subtle)',
+                background: missionWorldTab === 'world_2' ? 'rgba(112, 71, 255, 0.2)' : 'rgba(255, 255, 255, 0.03)',
+                color: missionWorldTab === 'world_2' ? '#FFFFFF' : 'var(--color-text-dim)',
+                cursor: 'pointer'
+              }}
+            >
+              World 2: Broken Present (7)
+            </button>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '320px', overflowY: 'auto' }}>
+            {missionWorldTab === 'world_1' ? (
+              [
+                '1. Arrive at the Lost Kingdom Castle Courtyard',
+                '2. Master Character Locomotion, Sprint, and Jump',
+                '3. Discover the Ancient Pedestal & Altar',
+                '4. Claim the Chrono Keystone Artifact',
+                '5. Search the Ruins for 3 Temporal Energy Fragments',
+                '6. Uncover Hidden Ruins along Eastern and Western Colonnades',
+                '7. Channel Energy Fragments into the Ancient Stone Gate',
+                '8. Solve the Chrono Alignment Dial Mechanism',
+                '9. Activate the Central Time Portal Dais',
+                '10. Leap Through the Active Portal to Restore the Continuum'
+              ].map((m, i) => (
+                <div key={i} style={{ padding: '0.5rem 0.75rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-xs)', fontSize: '0.82rem', color: '#FFFFFF' }}>
+                  {m}
+                </div>
+              ))
+            ) : (
+              [
+                '1. Infiltrate Destroyed Cyber Metropolis & Boot City Terminal',
+                '2. Calibrate the Highway Comm Relay Dish on the Shattered Overpass',
+                '3. Reclaim 3 Scattered Quantum Energy Cores (Alpha, Beta, Gamma)',
+                '4. Unlock the Sub-Level Research Facility Armored Bulkhead',
+                '5. Align 3 Holographic Phase Prisms to Zero-Point Resonance',
+                '6. Stabilize and Overcharge the Central Time Core Reactor',
+                '7. Step Into the Stabilized Timeline Gateway to Mend Present Day'
+              ].map((m, i) => (
+                <div key={i} style={{ padding: '0.5rem 0.75rem', background: 'rgba(112, 71, 255, 0.08)', borderLeft: '3px solid var(--color-purple)', borderRadius: 'var(--radius-xs)', fontSize: '0.82rem', color: '#FFFFFF' }}>
+                  {m}
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </Modal>
 
@@ -259,14 +378,15 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
         isOpen={modalOpen === 'achievements'}
         onClose={() => setModalOpen(null)}
         title="Temporal Achievements"
-        maxWidth="480px"
+        maxWidth="500px"
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '340px', overflowY: 'auto' }}>
+          {/* World 1 Achievements */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(245, 185, 66, 0.1)', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-sm)' }}>
             <Award size={24} color="#F5B942" />
             <div>
               <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>First Steps Through Time</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Claim the Chrono Keystone artifact. (+100 XP)</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Claim the Chrono Keystone artifact in World 1. (+100 XP)</div>
             </div>
           </div>
 
@@ -278,11 +398,36 @@ export default function MainMenuScene({ onStartGame = () => {}, onContinueGame =
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(112, 71, 255, 0.1)', border: '1px solid var(--border-purple)', borderRadius: 'var(--radius-sm)' }}>
-            <Award size={24} color="#C084FC" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(22, 140, 255, 0.1)', border: '1px solid var(--border-cyan)', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#168CFF" />
             <div>
               <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Gateway Master</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Align dials and activate the World 1 Time Portal. (+500 XP)</div>
+            </div>
+          </div>
+
+          {/* World 2 Achievements */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(112, 71, 255, 0.12)', border: '1px solid var(--border-purple)', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#C084FC" />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Cyber Overpass Explorer</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Boot terminal and calibrate highway comm dish. (+150 XP)</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(192, 132, 252, 0.12)', border: '1px solid var(--border-purple)', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#C084FC" />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Quantum Reclaimer</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Secure all 3 Quantum Cores avoiding drone fire. (+300 XP)</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem', background: 'rgba(245, 185, 66, 0.12)', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-sm)' }}>
+            <Award size={24} color="#F5B942" />
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#FFFFFF' }}>Temporal Stabilizer</div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Repair the Central Time Core & save the Present. (+750 XP)</div>
             </div>
           </div>
         </div>

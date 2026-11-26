@@ -12,9 +12,10 @@ import AudioSystem from '../systems/AudioSystem';
  * World 1 Victory & Timeline Restoration Screen
  * Features official AERVYN logo, XP rewards banner, mission telemetry, and navigation.
  */
-export default function VictoryScreen({ onFreeRoam = () => {} }) {
+export default function VictoryScreen({ worldId = 'world_1', onFreeRoam = () => {} }) {
   const navigate = useNavigate();
   const state = GameState.getState();
+  const isWorld2 = worldId === 'world_2' || state.worldId === 'world_2';
 
   const handleDashboard = () => {
     AudioSystem.playInteract();
@@ -55,8 +56,8 @@ export default function VictoryScreen({ onFreeRoam = () => {} }) {
           <Logo size="md" glow={true} showTagline={false} />
         </div>
 
-        <Badge variant="gold" size="md" pulse={true} style={{ marginBottom: '0.75rem' }}>
-          World 1 Restored
+        <Badge variant={isWorld2 ? 'purple' : 'gold'} size="md" pulse={true} style={{ marginBottom: '0.75rem' }}>
+          {isWorld2 ? 'World 2 Restored' : 'World 1 Restored'}
         </Badge>
 
         <h1
@@ -67,11 +68,13 @@ export default function VictoryScreen({ onFreeRoam = () => {} }) {
             letterSpacing: '0.04em'
           }}
         >
-          TIMELINE PORTAL AWAKENED!
+          {isWorld2 ? 'CENTRAL TIME CORE REPAIRED!' : 'TIMELINE PORTAL AWAKENED!'}
         </h1>
 
         <p style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginBottom: '1.75rem', lineHeight: 1.5 }}>
-          You have mastered the Chrono Keystone, collected the three ancient fragments, aligned the dials, and unlocked the gateway through time.
+          {isWorld2
+            ? 'You have stabilized the Broken Present metropolis, recovered all 3 Quantum Cores, synchronized the zero-point phase matrix, and awakened the next timeline gateway.'
+            : 'You have mastered the Chrono Keystone, collected the three ancient fragments, aligned the dials, and unlocked the gateway through time.'}
         </p>
 
         {/* Stats Summary Grid */}
@@ -85,12 +88,18 @@ export default function VictoryScreen({ onFreeRoam = () => {} }) {
         >
           <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
             <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>XP Awarded</div>
-            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--color-gold)', marginTop: '2px' }}>+500</div>
+            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--color-gold)', marginTop: '2px' }}>
+              {isWorld2 ? '+750' : '+500'}
+            </div>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-            <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Fragments</div>
-            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--color-cyan)', marginTop: '2px' }}>3 / 3</div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
+              {isWorld2 ? 'Quantum Cores' : 'Fragments'}
+            </div>
+            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: isWorld2 ? '#C084FC' : 'var(--color-cyan)', marginTop: '2px' }}>
+              3 / 3
+            </div>
           </div>
 
           <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
@@ -102,7 +111,7 @@ export default function VictoryScreen({ onFreeRoam = () => {} }) {
         {/* Action Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <Button
-            variant="gold"
+            variant={isWorld2 ? 'purple' : 'gold'}
             fullWidth
             size="lg"
             icon={ArrowRight}
@@ -119,7 +128,7 @@ export default function VictoryScreen({ onFreeRoam = () => {} }) {
             icon={RotateCcw}
             onClick={onFreeRoam}
           >
-            Explore World 1 in Free Roam
+            Explore {isWorld2 ? 'World 2' : 'World 1'} in Free Roam
           </Button>
         </div>
       </div>

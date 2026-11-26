@@ -239,13 +239,13 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <div style={{ padding: '0.85rem 1rem', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)', opacity: 0.8 }}>
+            <div style={{ padding: '0.85rem 1rem', background: 'rgba(112, 71, 255, 0.1)', border: '1px solid var(--border-purple)', borderRadius: 'var(--radius-sm)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <strong style={{ color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>World 2: The Broken Present</strong>
-                <Badge variant="neutral" size="sm">Unlocks Lvl 5</Badge>
+                <strong style={{ color: '#FFFFFF', fontSize: '0.92rem' }}>World 2: The Broken Present</strong>
+                <Badge variant="purple" size="sm">Playable</Badge>
               </div>
-              <p style={{ fontSize: '0.78rem', color: 'var(--color-text-dim)', margin: '0.35rem 0 0 0' }}>
-                Abandoned metropolis and underground subways.
+              <p style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', margin: '0.35rem 0 0 0' }}>
+                Shattered cyber metropolis, 3 Quantum Cores, underground research lab, and the Central Time Core.
               </p>
             </div>
           </div>

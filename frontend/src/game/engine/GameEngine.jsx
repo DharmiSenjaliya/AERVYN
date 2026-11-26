@@ -3,6 +3,7 @@ import GameState from './GameState';
 import DesktopControls from '../controls/DesktopControls';
 import MobileControls from '../controls/MobileControls';
 import LostKingdomScene from '../scenes/LostKingdomScene';
+import BrokenPresentScene from '../scenes/BrokenPresentScene';
 import MainMenuScene from '../scenes/MainMenuScene';
 import GameHUD from '../ui/GameHUD';
 import PauseMenu from '../ui/PauseMenu';
@@ -12,12 +13,14 @@ import IntroCinematic from '../ui/IntroCinematic';
 import SaveSystem from '../systems/SaveSystem';
 
 /**
- * AERVYN 3D Game Engine - Master Scene & State Orchestrator
- * Seamlessly manages scene transitions, cinematic intro cutscenes,
- * desktop & mobile input blending, HUD rendering, and background persistence.
+ * AERVYN 3D Game Engine - Multi-World Scene & State Orchestrator
+ * Seamlessly loads World 1 (The Lost Kingdom) or World 2 (The Broken Present)
+ * with dedicated environments, missions, hazards, and state persistence.
  */
 export default function GameEngine() {
   const [currentScene, setCurrentScene] = useState(GameState.getState().currentScene);
+  const [worldId, setWorldId] = useState(GameState.getState().worldId);
+  const [damageFlash, setDamageFlash] = useState(false);
   const [mobileInput, setMobileInput] = useState({ x: 0, y: 0, jump: false, sprint: false });
   const [isMobile, setIsMobile] = useState(false);
   const [showIntro, setShowIntro] = useState(false);
@@ -34,9 +37,11 @@ export default function GameEngine() {
     // 2. Initialize desktop keyboard/mouse listeners
     DesktopControls.init();
 
-    // 3. Subscribe to GameState scene changes
+    // 3. Subscribe to GameState changes
     const unsub = GameState.subscribe((state) => {
       setCurrentScene(state.currentScene);
+      setWorldId(state.worldId);
+      setDamageFlash(state.damageFlash);
     });
 
     // 4. Start automatic telemetry save system (every 25 seconds)
@@ -86,6 +91,23 @@ export default function GameEngine() {
         userSelect: 'none'
       }}
     >
+      {/* Red Edge Damage Flash Indicator when player takes damage from hazards */}
+      {damageFlash && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            zIndex: 999,
+            boxShadow: 'inset 0 0 60px rgba(239, 68, 68, 0.85)',
+            border: '3px solid rgba(239, 68, 68, 0.6)'
+          }}
+        />
+      )}
+
       {/* 1. SCENE: Main Menu */}
       {currentScene === 'menu' && (
         <MainMenuScene
@@ -97,15 +119,22 @@ export default function GameEngine() {
         />
       )}
 
-      {/* 2. SCENE: Active Gameplay (World 1: The Lost Kingdom) */}
+      {/* 2. SCENE: Active Gameplay (World 1 or World 2) */}
       {(currentScene === 'playing' || currentScene === 'paused' || currentScene === 'victory' || currentScene === 'gameover') && (
         <>
-          {/* 3D Canvas Scene */}
-          <LostKingdomScene mobileInput={mobileInput} />
+          {/* Active World 3D Canvas Scene */}
+          {worldId === 'world_2' ? (
+            <BrokenPresentScene mobileInput={mobileInput} />
+          ) : (
+            <LostKingdomScene mobileInput={mobileInput} />
+          )}
 
           {/* Cinematic Introduction Cutscene Overlay (when starting New Game) */}
           {showIntro && currentScene === 'playing' && (
-            <IntroCinematic onComplete={() => setShowIntro(false)} />
+            <IntroCinematic
+              worldId={worldId}
+              onComplete={() => setShowIntro(false)}
+            />
           )}
 
           {/* Real-Time Gameplay HUD (hidden during intro) */}
@@ -141,6 +170,7 @@ export default function GameEngine() {
           {/* Victory Modal Overlay */}
           {currentScene === 'victory' && (
             <VictoryScreen
+              worldId={worldId}
               onFreeRoam={() => GameState.setScene('playing')}
             />
           )}

@@ -42,9 +42,12 @@ export default function GameHUD({ onPause = () => {}, isMobile = false }) {
     };
   }, []);
 
-  const { player, mission, inventory, interactionPrompt, worldName } = hudState;
+  const { player, mission, inventory, interactionPrompt, worldName, worldId } = hudState;
+  const isWorld2 = worldId === 'world_2';
   const fragments = inventory?.fragmentsCollected || 0;
+  const cores = inventory?.coresCollected || 0;
   const hasKeystone = inventory?.hasKeystone || false;
+  const hasDecrypter = inventory?.hasDecrypter || mission?.currentStep > 1;
 
   return (
     <>
@@ -269,7 +272,7 @@ export default function GameHUD({ onPause = () => {}, isMobile = false }) {
             </p>
           </div>
 
-          {/* Collectibles Tracker (Fragments & Keystone) */}
+          {/* Collectibles Tracker (Fragments & Keystone for World 1, Cores & Decrypter for World 2) */}
           <div
             className="glass-panel"
             style={{
@@ -283,21 +286,43 @@ export default function GameHUD({ onPause = () => {}, isMobile = false }) {
             onClick={() => setInventoryOpen(true)}
             title="Click to view Inventory [I]"
           >
-            {/* Keystone Badge */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: hasKeystone ? 1 : 0.4 }}>
-              <Sparkles size={16} color={hasKeystone ? '#F5B942' : 'var(--color-text-dim)'} />
-              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: hasKeystone ? '#FFFFFF' : 'var(--color-text-dim)' }}>
-                Keystone
-              </span>
-            </div>
+            {isWorld2 ? (
+              <>
+                {/* City Terminal Decrypter Badge */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: hasDecrypter ? 1 : 0.4 }}>
+                  <Sparkles size={16} color={hasDecrypter ? '#00D9FF' : 'var(--color-text-dim)'} />
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: hasDecrypter ? '#FFFFFF' : 'var(--color-text-dim)' }}>
+                    Decrypter
+                  </span>
+                </div>
 
-            {/* Fragments Counter */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <Zap size={16} color={fragments >= 3 ? 'var(--color-success)' : 'var(--color-cyan)'} />
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#FFFFFF' }}>
-                Fragments: {fragments} / 3
-              </span>
-            </div>
+                {/* Quantum Cores Counter */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Zap size={16} color={cores >= 3 ? 'var(--color-success)' : '#C084FC'} />
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#FFFFFF' }}>
+                    Quantum Cores: {cores} / 3
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Keystone Badge */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', opacity: hasKeystone ? 1 : 0.4 }}>
+                  <Sparkles size={16} color={hasKeystone ? '#F5B942' : 'var(--color-text-dim)'} />
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: hasKeystone ? '#FFFFFF' : 'var(--color-text-dim)' }}>
+                    Keystone
+                  </span>
+                </div>
+
+                {/* Fragments Counter */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Zap size={16} color={fragments >= 3 ? 'var(--color-success)' : 'var(--color-cyan)'} />
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#FFFFFF' }}>
+                    Fragments: {fragments} / 3
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
