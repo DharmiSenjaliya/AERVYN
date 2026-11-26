@@ -4,6 +4,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminPlayerController;
+use App\Http\Controllers\Admin\AdminWorldController;
+use App\Http\Controllers\Admin\AdminMissionController;
+use App\Http\Controllers\Admin\AdminCollectibleController;
+use App\Http\Controllers\Admin\AdminAnalyticsController;
+use App\Http\Controllers\Admin\AdminSessionController;
+use App\Http\Controllers\Admin\AdminFeedbackController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminActivityLogController;
+use App\Http\Controllers\Admin\AdminSettingController;
+use App\Http\Controllers\Admin\AdminMediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,11 +23,12 @@ use App\Http\Controllers\GameController;
 |--------------------------------------------------------------------------
 */
 
-// Public Authentication Endpoints
+// Public Authentication & Feedback Endpoints
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 });
+Route::post('/feedback', [AdminFeedbackController::class, 'store']);
 
 // Authenticated Routes (Sanctum Guard)
 Route::middleware('auth:sanctum')->group(function () {
@@ -31,5 +44,62 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/checkpoint', [GameController::class, 'reachCheckpoint']);
         Route::post('/complete-world', [GameController::class, 'completeWorld']);
         Route::post('/reset', [GameController::class, 'resetRun']);
+    });
+
+    // Professional Admin Panel Endpoints (Admin Guard)
+    Route::middleware('admin')->prefix('admin')->group(function () {
+        // 1. Dashboard
+        Route::get('/dashboard-stats', [AdminDashboardController::class, 'stats']);
+
+        // 2. Players
+        Route::get('/players', [AdminPlayerController::class, 'index']);
+        Route::get('/players/{id}', [AdminPlayerController::class, 'show']);
+        Route::post('/players/{id}/status', [AdminPlayerController::class, 'updateStatus']);
+
+        // 3. Worlds
+        Route::get('/worlds', [AdminWorldController::class, 'index']);
+        Route::get('/worlds/{id}', [AdminWorldController::class, 'show']);
+        Route::put('/worlds/{id}', [AdminWorldController::class, 'update']);
+        Route::post('/worlds/{id}/thumbnail', [AdminWorldController::class, 'uploadThumbnail']);
+
+        // 4. Missions
+        Route::get('/missions', [AdminMissionController::class, 'index']);
+        Route::get('/missions/{id}', [AdminMissionController::class, 'show']);
+        Route::put('/missions/{id}', [AdminMissionController::class, 'update']);
+
+        // 5. Collectibles & Story Content
+        Route::get('/collectibles', [AdminCollectibleController::class, 'index']);
+        Route::get('/collectibles/{id}', [AdminCollectibleController::class, 'show']);
+        Route::put('/collectibles/{id}', [AdminCollectibleController::class, 'update']);
+
+        // 6. Analytics
+        Route::get('/analytics', [AdminAnalyticsController::class, 'index']);
+
+        // 7. Game Sessions
+        Route::get('/sessions', [AdminSessionController::class, 'index']);
+
+        // 8. Feedback & Support
+        Route::get('/feedback', [AdminFeedbackController::class, 'index']);
+        Route::put('/feedback/{id}', [AdminFeedbackController::class, 'update']);
+
+        // 9. Admin Users
+        Route::get('/users', [AdminUserController::class, 'index']);
+        Route::post('/users', [AdminUserController::class, 'store']);
+        Route::put('/users/{id}', [AdminUserController::class, 'update']);
+        Route::post('/users/{id}/toggle-status', [AdminUserController::class, 'toggleStatus']);
+
+        // 10. Activity Logs
+        Route::get('/activity-logs', [AdminActivityLogController::class, 'index']);
+
+        // 11. Settings & Password
+        Route::get('/settings', [AdminSettingController::class, 'index']);
+        Route::put('/settings', [AdminSettingController::class, 'update']);
+        Route::post('/settings/maintenance', [AdminSettingController::class, 'toggleMaintenance']);
+        Route::post('/change-password', [AdminSettingController::class, 'changePassword']);
+
+        // 12. Media & Asset Management
+        Route::get('/media', [AdminMediaController::class, 'index']);
+        Route::post('/media/upload', [AdminMediaController::class, 'upload']);
+        Route::delete('/media/{filename}', [AdminMediaController::class, 'destroy']);
     });
 });

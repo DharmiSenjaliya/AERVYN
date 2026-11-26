@@ -18,6 +18,17 @@ import DashboardPage from '../pages/player/DashboardPage';
 
 // Admin Pages
 import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
+import PlayerManagementPage from '../pages/admin/PlayerManagementPage';
+import WorldManagementPage from '../pages/admin/WorldManagementPage';
+import MissionManagementPage from '../pages/admin/MissionManagementPage';
+import CollectibleManagementPage from '../pages/admin/CollectibleManagementPage';
+import AnalyticsPage from '../pages/admin/AnalyticsPage';
+import GameSessionsPage from '../pages/admin/GameSessionsPage';
+import FeedbackManagementPage from '../pages/admin/FeedbackManagementPage';
+import AdminUsersPage from '../pages/admin/AdminUsersPage';
+import ActivityLogsPage from '../pages/admin/ActivityLogsPage';
+import AdminSettingsPage from '../pages/admin/AdminSettingsPage';
+import MediaManagementPage from '../pages/admin/MediaManagementPage';
 
 // 3D Game Engine View
 import GameView from '../pages/game/GameView';
@@ -86,27 +97,31 @@ export default function AppRoutes() {
       >
         <Route index element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboardPage />} />
-        <Route path="players" element={<AdminDashboardPage />} />
-        <Route path="worlds" element={<AdminDashboardPage />} />
-        <Route path="levels" element={<AdminDashboardPage />} />
-        <Route path="missions" element={<AdminDashboardPage />} />
-        <Route path="characters" element={<AdminDashboardPage />} />
-        <Route path="enemies" element={<AdminDashboardPage />} />
-        <Route path="items" element={<AdminDashboardPage />} />
-        <Route path="inventory" element={<AdminDashboardPage />} />
-        <Route path="achievements" element={<AdminDashboardPage />} />
-        <Route path="assets" element={<AdminDashboardPage />} />
-        <Route path="sessions" element={<AdminDashboardPage />} />
-        <Route path="announcements" element={<AdminDashboardPage />} />
-        <Route path="notifications" element={<AdminDashboardPage />} />
-        <Route path="analytics" element={<AdminDashboardPage />} />
-        <Route path="reports" element={<AdminDashboardPage />} />
-        <Route path="users" element={<AdminDashboardPage />} />
-        <Route path="roles" element={<AdminDashboardPage />} />
-        <Route path="game-settings" element={<AdminDashboardPage />} />
-        <Route path="web-settings" element={<AdminDashboardPage />} />
-        <Route path="profile" element={<AdminDashboardPage />} />
-        <Route path="change-password" element={<AdminDashboardPage />} />
+        <Route path="players" element={<PlayerManagementPage />} />
+        <Route path="worlds" element={<WorldManagementPage />} />
+        <Route path="levels" element={<WorldManagementPage />} />
+        <Route path="missions" element={<MissionManagementPage />} />
+        <Route path="characters" element={<CollectibleManagementPage />} />
+        <Route path="enemies" element={<WorldManagementPage />} />
+        <Route path="items" element={<CollectibleManagementPage />} />
+        <Route path="collectibles" element={<CollectibleManagementPage />} />
+        <Route path="inventory" element={<CollectibleManagementPage />} />
+        <Route path="achievements" element={<CollectibleManagementPage />} />
+        <Route path="assets" element={<MediaManagementPage />} />
+        <Route path="sessions" element={<GameSessionsPage />} />
+        <Route path="announcements" element={<FeedbackManagementPage />} />
+        <Route path="feedback" element={<FeedbackManagementPage />} />
+        <Route path="notifications" element={<FeedbackManagementPage />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
+        <Route path="reports" element={<AnalyticsPage />} />
+        <Route path="users" element={<AdminUsersPage />} />
+        <Route path="roles" element={<ActivityLogsPage />} />
+        <Route path="activity-logs" element={<ActivityLogsPage />} />
+        <Route path="game-settings" element={<AdminSettingsPage />} />
+        <Route path="web-settings" element={<AdminSettingsPage />} />
+        <Route path="settings" element={<AdminSettingsPage />} />
+        <Route path="profile" element={<AdminSettingsPage />} />
+        <Route path="change-password" element={<AdminSettingsPage />} />
       </Route>
 
       {/* 5. Playable 3D Game Full-Screen Canvas */}

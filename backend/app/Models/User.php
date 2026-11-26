@@ -46,13 +46,43 @@ class User extends Authenticatable
         return $this->hasOne(PlayerProgress::class);
     }
 
+    public function allProgress()
+    {
+        return $this->hasMany(PlayerProgress::class);
+    }
+
     public function sessions()
     {
         return $this->hasMany(GameSession::class);
     }
 
+    public function feedback()
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(AdminActivityLog::class, 'admin_id');
+    }
+
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['super_admin', 'admin', 'game_manager', 'support_manager', 'analyst']);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return in_array($this->role, ['super_admin', 'admin']);
+    }
+
+    public function hasRole(string|array $roles): bool
+    {
+        $roles = (array) $roles;
+        // Super admins have access to all role actions
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+        return in_array($this->role, $roles);
     }
 }
