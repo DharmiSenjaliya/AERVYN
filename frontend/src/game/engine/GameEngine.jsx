@@ -8,18 +8,19 @@ import GameHUD from '../ui/GameHUD';
 import PauseMenu from '../ui/PauseMenu';
 import VictoryScreen from '../ui/VictoryScreen';
 import GameOverScreen from '../ui/GameOverScreen';
-import LoadingScreen from '../../components/common/LoadingScreen';
+import IntroCinematic from '../ui/IntroCinematic';
 import SaveSystem from '../systems/SaveSystem';
 
 /**
  * AERVYN 3D Game Engine - Master Scene & State Orchestrator
- * Seamlessly manages scene transitions, desktop & mobile input blending, HUD rendering,
- * and background persistence.
+ * Seamlessly manages scene transitions, cinematic intro cutscenes,
+ * desktop & mobile input blending, HUD rendering, and background persistence.
  */
 export default function GameEngine() {
   const [currentScene, setCurrentScene] = useState(GameState.getState().currentScene);
   const [mobileInput, setMobileInput] = useState({ x: 0, y: 0, jump: false, sprint: false });
   const [isMobile, setIsMobile] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
 
   useEffect(() => {
     // 1. Detect touch device / viewport width
@@ -38,7 +39,7 @@ export default function GameEngine() {
       setCurrentScene(state.currentScene);
     });
 
-    // 4. Start automatic telemetry save system
+    // 4. Start automatic telemetry save system (every 25 seconds)
     SaveSystem.startAutoSave(25000);
 
     return () => {
@@ -69,6 +70,11 @@ export default function GameEngine() {
     setMobileInput((prev) => ({ ...prev, sprint: !prev.sprint }));
   };
 
+  const startNewGameWithCinematic = () => {
+    setShowIntro(true);
+    GameState.setScene('playing');
+  };
+
   return (
     <div
       style={{
@@ -83,8 +89,11 @@ export default function GameEngine() {
       {/* 1. SCENE: Main Menu */}
       {currentScene === 'menu' && (
         <MainMenuScene
-          onStartGame={() => GameState.setScene('playing')}
-          onContinueGame={() => GameState.setScene('playing')}
+          onStartGame={startNewGameWithCinematic}
+          onContinueGame={() => {
+            setShowIntro(false);
+            GameState.setScene('playing');
+          }}
         />
       )}
 
@@ -94,14 +103,21 @@ export default function GameEngine() {
           {/* 3D Canvas Scene */}
           <LostKingdomScene mobileInput={mobileInput} />
 
-          {/* Real-Time Gameplay HUD */}
-          <GameHUD
-            onPause={() => GameState.setScene('paused')}
-            isMobile={isMobile}
-          />
+          {/* Cinematic Introduction Cutscene Overlay (when starting New Game) */}
+          {showIntro && currentScene === 'playing' && (
+            <IntroCinematic onComplete={() => setShowIntro(false)} />
+          )}
+
+          {/* Real-Time Gameplay HUD (hidden during intro) */}
+          {!showIntro && (
+            <GameHUD
+              onPause={() => GameState.setScene('paused')}
+              isMobile={isMobile}
+            />
+          )}
 
           {/* Mobile On-Screen Touch Controls (shown on touch/mobile displays) */}
-          {isMobile && currentScene === 'playing' && (
+          {isMobile && currentScene === 'playing' && !showIntro && (
             <MobileControls
               onMobileMove={handleMobileMove}
               onMobileStop={handleMobileStop}
@@ -115,7 +131,10 @@ export default function GameEngine() {
           {currentScene === 'paused' && (
             <PauseMenu
               onResume={() => GameState.setScene('playing')}
-              onExitToMenu={() => GameState.setScene('menu')}
+              onExitToMenu={() => {
+                setShowIntro(false);
+                GameState.setScene('menu');
+              }}
             />
           )}
 
@@ -140,7 +159,10 @@ export default function GameEngine() {
                   }
                 });
               }}
-              onExit={() => GameState.setScene('menu')}
+              onExit={() => {
+                setShowIntro(false);
+                GameState.setScene('menu');
+              }}
             />
           )}
         </>

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import CharacterController from './CharacterController';
@@ -7,14 +7,18 @@ import GameState from '../engine/GameState';
 import InteractionSystem from '../systems/InteractionSystem';
 
 /**
- * Original 3D Playable Character (Aervyn Protagonist)
- * Complete with procedural limb locomotion, jump dynamics, Chrono Device backpack,
- * and point lighting.
+ * Enhanced 3D Protagonist Character Model & Procedural Animator
+ * Features:
+ * - Natural idle breathing sway
+ * - Sprint forward lean with flowing cape
+ * - Jump apex tuck and landing squash/bounce
+ * - Interactive arm reach animation
+ * - Chrono Keystone backpack gear mechanics
  */
 export default function PlayerCharacter({ playerRef, mobileInput = null }) {
   const controller = useRef(new CharacterController());
 
-  // Mesh limb refs for procedural animation
+  // Mesh limb refs for animation
   const torsoRef = useRef();
   const leftLegRef = useRef();
   const rightLegRef = useRef();
@@ -22,6 +26,17 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
   const rightArmRef = useRef();
   const chronoCoreRef = useRef();
   const capeRef = useRef();
+  const visorRef = useRef();
+
+  useEffect(() => {
+    // Listen for interaction events to trigger reach pose
+    const handleInteractEvent = () => {
+      controller.current.triggerInteractAnimation();
+    };
+
+    window.addEventListener('aervyn:player-interact', handleInteractEvent);
+    return () => window.removeEventListener('aervyn:player-interact', handleInteractEvent);
+  }, []);
 
   useFrame((state, delta) => {
     if (!playerRef.current) return;
@@ -42,18 +57,18 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
       if (mobileInput.jump) jump = true;
     }
 
-    // 2. Update physics & locomotion
+    // 2. Physics & locomotion update
     controller.current.update(
       playerRef.current,
       { forward, right, sprint, jump },
       delta
     );
 
-    // 3. Update spatial interaction query
+    // 3. Spatial interaction query
     const pos = playerRef.current.position;
     InteractionSystem.update([pos.x, pos.y, pos.z]);
 
-    // Check tutorial steps 1 and 2
+    // Tutorial step triggers
     if ((forward !== 0 || right !== 0) && GameState.getState().mission.currentStep === 1) {
       GameState.advanceStep(2);
     }
@@ -64,37 +79,67 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
     // 4. Procedural Character Animation Blending
     const time = state.clock.elapsedTime;
     const isMoving = forward !== 0 || right !== 0;
-    const animSpeed = sprint ? 16 : 9;
+    const isInteracting = controller.current.isInteracting;
+    const isGrounded = controller.current.isGrounded;
+    const animSpeed = sprint ? 16 : 9.5;
 
-    if (isMoving && controller.current.isGrounded) {
-      // Walk / Run Limb Swing
-      const swing = Math.sin(time * animSpeed) * (sprint ? 0.75 : 0.45);
+    // A. Interacting Pose (Arm Reach)
+    if (isInteracting) {
+      if (rightArmRef.current) {
+        rightArmRef.current.rotation.x = -1.35; // Extend arm forward toward relic
+        rightArmRef.current.rotation.z = 0.2;
+      }
+      if (torsoRef.current) torsoRef.current.rotation.x = 0.12;
+    }
+    // B. In-Air Jump Pose
+    else if (!isGrounded) {
+      if (leftLegRef.current) leftLegRef.current.rotation.x = 0.45;
+      if (rightLegRef.current) rightLegRef.current.rotation.x = 0.25;
+      if (leftArmRef.current) leftArmRef.current.rotation.x = -0.6;
+      if (rightArmRef.current) rightArmRef.current.rotation.x = -0.6;
+      if (capeRef.current) capeRef.current.rotation.x = 0.55;
+    }
+    // C. Walk / Run Locomotion
+    else if (isMoving) {
+      const swing = Math.sin(time * animSpeed) * (sprint ? 0.72 : 0.42);
       if (leftLegRef.current) leftLegRef.current.rotation.x = swing;
       if (rightLegRef.current) rightLegRef.current.rotation.x = -swing;
-      if (leftArmRef.current) leftArmRef.current.rotation.x = -swing * 0.8;
-      if (rightArmRef.current) rightArmRef.current.rotation.x = swing * 0.8;
-      if (torsoRef.current) torsoRef.current.rotation.y = Math.sin(time * animSpeed * 0.5) * 0.1;
-      if (capeRef.current) capeRef.current.rotation.x = (sprint ? 0.6 : 0.25) + Math.sin(time * animSpeed) * 0.1;
-    } else if (!controller.current.isGrounded) {
-      // Jump Pose (Tucked Legs, Raised Arms)
-      if (leftLegRef.current) leftLegRef.current.rotation.x = 0.5;
-      if (rightLegRef.current) rightLegRef.current.rotation.x = 0.3;
-      if (leftArmRef.current) leftArmRef.current.rotation.x = -0.7;
-      if (rightArmRef.current) rightArmRef.current.rotation.x = -0.7;
-    } else {
-      // Idle Breathing Sway
-      const breathe = Math.sin(time * 2.2) * 0.04;
-      if (torsoRef.current) torsoRef.current.position.y = 0.85 + breathe;
+      if (leftArmRef.current) leftArmRef.current.rotation.x = -swing * 0.85;
+      if (rightArmRef.current) rightArmRef.current.rotation.x = swing * 0.85;
+
+      // Sprint forward lean
+      const lean = sprint ? 0.18 : 0.08;
+      if (torsoRef.current) {
+        torsoRef.current.rotation.x = lean;
+        torsoRef.current.rotation.y = Math.sin(time * animSpeed * 0.5) * 0.08;
+      }
+      if (capeRef.current) {
+        capeRef.current.rotation.x = (sprint ? 0.65 : 0.3) + Math.sin(time * animSpeed) * 0.1;
+      }
+    }
+    // D. Idle Breathing Sway
+    else {
+      const breathe = Math.sin(time * 2.2) * 0.035;
+      if (torsoRef.current) {
+        torsoRef.current.position.y = 0.85 + breathe;
+        torsoRef.current.rotation.x = 0;
+        torsoRef.current.rotation.y = 0;
+      }
       if (leftLegRef.current) leftLegRef.current.rotation.x = 0;
       if (rightLegRef.current) rightLegRef.current.rotation.x = 0;
       if (leftArmRef.current) leftArmRef.current.rotation.x = breathe;
       if (rightArmRef.current) rightArmRef.current.rotation.x = -breathe;
-      if (capeRef.current) capeRef.current.rotation.x = 0.05 + Math.sin(time * 1.5) * 0.03;
+      if (capeRef.current) capeRef.current.rotation.x = 0.08 + Math.sin(time * 1.5) * 0.04;
     }
 
     // Chrono Core Gear Rotation
     if (chronoCoreRef.current) {
-      chronoCoreRef.current.rotation.z += delta * 2.5;
+      chronoCoreRef.current.rotation.z += delta * (isMoving ? 3.5 : 1.2);
+    }
+
+    // Cyan Visor Pulse
+    if (visorRef.current) {
+      visorRef.current.material.emissiveIntensity = 2.0 + Math.sin(time * 3.5) * 0.5;
     }
   });
 
@@ -114,7 +159,7 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
           <meshStandardMaterial
             color="#00D9FF"
             emissive="#00D9FF"
-            emissiveIntensity={1.8}
+            emissiveIntensity={2.0}
             side={THREE.DoubleSide}
           />
         </mesh>
@@ -134,7 +179,7 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
           </mesh>
 
           {/* Luminous Cyan Visor */}
-          <mesh position={[0, 0.02, 0.18]}>
+          <mesh ref={visorRef} position={[0, 0.02, 0.18]}>
             <boxGeometry args={[0.28, 0.07, 0.12]} />
             <meshStandardMaterial
               color="#00D9FF"
@@ -164,13 +209,13 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
             <meshStandardMaterial
               color="#F5B942"
               emissive="#D48800"
-              emissiveIntensity={0.6}
+              emissiveIntensity={1.0}
               metalness={0.9}
             />
           </mesh>
 
           {/* Ambient Portal Light from Device */}
-          <pointLight color="#00D9FF" intensity={12} distance={8} position={[0, 0, 0.2]} />
+          <pointLight color="#00D9FF" intensity={14} distance={8} position={[0, 0, 0.2]} />
         </group>
 
         {/* Adventurer Cape */}
@@ -185,7 +230,6 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
             <cylinderGeometry args={[0.08, 0.07, 0.55, 12]} />
             <meshStandardMaterial color="#168CFF" roughness={0.4} metalness={0.7} />
           </mesh>
-          {/* Gauntlet */}
           <mesh position={[0, -0.45, 0]}>
             <boxGeometry args={[0.12, 0.16, 0.12]} />
             <meshStandardMaterial color="#0c162d" roughness={0.3} metalness={0.9} />
@@ -198,7 +242,6 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
             <cylinderGeometry args={[0.08, 0.07, 0.55, 12]} />
             <meshStandardMaterial color="#168CFF" roughness={0.4} metalness={0.7} />
           </mesh>
-          {/* Gauntlet */}
           <mesh position={[0, -0.45, 0]}>
             <boxGeometry args={[0.12, 0.16, 0.12]} />
             <meshStandardMaterial color="#0c162d" roughness={0.3} metalness={0.9} />
@@ -213,7 +256,6 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
           <cylinderGeometry args={[0.11, 0.09, 0.8, 12]} />
           <meshStandardMaterial color="#0c1328" roughness={0.5} metalness={0.6} />
         </mesh>
-        {/* Boot */}
         <mesh position={[0, -0.78, 0.05]} castShadow>
           <boxGeometry args={[0.16, 0.14, 0.28]} />
           <meshStandardMaterial color="#1e293b" roughness={0.6} />
@@ -226,7 +268,6 @@ export default function PlayerCharacter({ playerRef, mobileInput = null }) {
           <cylinderGeometry args={[0.11, 0.09, 0.8, 12]} />
           <meshStandardMaterial color="#0c1328" roughness={0.5} metalness={0.6} />
         </mesh>
-        {/* Boot */}
         <mesh position={[0, -0.78, 0.05]} castShadow>
           <boxGeometry args={[0.16, 0.14, 0.28]} />
           <meshStandardMaterial color="#1e293b" roughness={0.6} />

@@ -1,10 +1,11 @@
 /**
  * AERVYN: Echoes of Time - Desktop Input Controller
- * Captures WASD / Arrow keys, Sprint, Jump, Interaction, and Mouse Camera Deltas.
+ * Captures WASD / Arrow keys, Sprint, Jump, Interaction, Inventory, and Mouse Camera.
  */
 
 import GameState from '../engine/GameState';
 import InteractionSystem from '../systems/InteractionSystem';
+import AudioSystem from '../systems/AudioSystem';
 
 class DesktopControlsManager {
   constructor() {
@@ -18,7 +19,6 @@ class DesktopControlsManager {
     };
 
     this.mouseDelta = { x: 0, y: 0 };
-    this.isPointerLocked = false;
     this.initialized = false;
 
     this.onKeyDown = this.handleKeyDown.bind(this);
@@ -42,7 +42,10 @@ class DesktopControlsManager {
   }
 
   handleKeyDown(e) {
-    // Only capture while actively playing
+    // Start ambient background on first keystroke
+    AudioSystem.startAmbience();
+
+    // Only capture while actively playing or paused
     if (GameState.getState().currentScene !== 'playing') {
       if (e.key === 'Escape' && GameState.getState().currentScene === 'paused') {
         GameState.setScene('playing');
@@ -52,7 +55,7 @@ class DesktopControlsManager {
 
     const key = e.key.toLowerCase();
 
-    // Prevent spacebar or arrows from scrolling the webpage
+    // Prevent default browser scrolling on space or arrow keys
     if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(e.key)) {
       e.preventDefault();
     }
@@ -67,6 +70,11 @@ class DesktopControlsManager {
     // Interaction trigger [E]
     if (key === 'e') {
       InteractionSystem.trigger();
+    }
+
+    // Inventory toggle [I]
+    if (key === 'i') {
+      window.dispatchEvent(new CustomEvent('aervyn:toggle-inventory'));
     }
 
     // Pause toggle [ESC]

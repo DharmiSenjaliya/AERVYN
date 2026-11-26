@@ -1,7 +1,7 @@
 /**
  * AERVYN: Echoes of Time - Proximity Interaction System
  * Tracks interactive world entities, detects player proximity, displays HUD prompts,
- * and processes interaction trigger callbacks.
+ * and processes interaction trigger callbacks with animation event dispatch.
  */
 
 import GameState from '../engine/GameState';
@@ -66,6 +66,8 @@ class InteractionSystemManager {
   trigger() {
     if (this.activeTarget && typeof this.activeTarget.onInteract === 'function') {
       AudioSystem.playInteract();
+      // Dispatch reach animation event to character
+      window.dispatchEvent(new CustomEvent('aervyn:player-interact'));
       this.activeTarget.onInteract();
     }
   }
