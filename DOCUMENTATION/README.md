@@ -72,3 +72,19 @@ Welcome to the official technical, commercial, and operational documentation rep
     - Player onboarding, desktop & mobile controls, world puzzle walkthroughs, avatar customization, and challenge arena usage.
 25. [STUDIO ADMINISTRATOR MANUAL](ADMIN_GUIDE.md)
     - Administrative suite guide: player account management, telemetry analytics, feedback triage, media library, social conduct moderation, and commercial lead CRM.
+
+---
+
+### 5. Interactive Buyer Demo Room & Sales Operations
+26. [BUYER DEMO ROOM OPERATIONS MANUAL](BUYER_DEMO_ROOM_GUIDE.md)
+    - Architecture and operational walkthrough for `/buyer-demo`, public explorer mode, private token validation, and embedded feature showcases.
+27. [16-SECTION GUIDED PRODUCT TOUR SPECIFICATION](GUIDED_PRODUCT_TOUR.md)
+    - Sequential walkthrough catalog, hotkeys (ArrowRight, ArrowLeft, Escape), fullscreen presentation mode, and reduced motion accessibility.
+28. [PRIVATE BUYER DEMO ACCESS & LINK MANAGEMENT](PRIVATE_DEMO_ACCESS.md)
+    - Cryptographic SHA-256 token storage, administration link generation, session limits, expiration, and instant revocation.
+29. [DEMO SECURITY & ISOLATION ARCHITECTURE](DEMO_SECURITY.md)
+    - Threat modeling, in-memory demo isolation guarantees, least-privilege administrative demo access, and zero-PII policies.
+30. [BUYER PRESENTATION & SALES WALKTHROUGH GUIDE](BUYER_PRESENTATION_GUIDE.md)
+    - 15-minute executive pitch script, audio demonstration recommendations, and commercial package positioning.
+31. [DEMO TESTING & SECURITY VERIFICATION REPORT](DEMO_TESTING_REPORT.md)
+    - Automated test breakdown for private buyer access: active tokens, expired tokens, revoked tokens, and session limits with 100% pass rate.

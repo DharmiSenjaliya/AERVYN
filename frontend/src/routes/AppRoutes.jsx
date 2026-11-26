@@ -17,6 +17,7 @@ import RegisterPage from '../pages/auth/RegisterPage';
 import AdminLoginPage from '../pages/auth/AdminLoginPage';
 
 // Commercial Buyer Demo Mode
+import BuyerDemoHubPage from '../pages/buyer-demo/BuyerDemoHubPage';
 import BuyerDemoPage from '../pages/demo/BuyerDemoPage';
 import DemoCompletionPage from '../pages/demo/DemoCompletionPage';
 
@@ -53,6 +54,7 @@ import AdminSettingsPage from '../pages/admin/AdminSettingsPage';
 import MediaManagementPage from '../pages/admin/MediaManagementPage';
 import AdminSocialPage from '../pages/admin/AdminSocialPage';
 import AdminInquiriesPage from '../pages/admin/AdminInquiriesPage';
+import AdminBuyerDemoPage from '../pages/admin/AdminBuyerDemoPage';
 import AdminBrandingPage from '../pages/admin/AdminBrandingPage';
 import AdminProductContentPage from '../pages/admin/AdminProductContentPage';
 
@@ -95,6 +97,7 @@ export default function AppRoutes() {
       </Route>
 
       {/* 2. Standalone Commercial Buyer Demo & Completion Screen */}
+      <Route path="/buyer-demo" element={<BuyerDemoHubPage />} />
       <Route path="/demo" element={<BuyerDemoPage />} />
       <Route path="/demo/complete" element={<DemoCompletionPage />} />
 
@@ -172,6 +175,7 @@ export default function AppRoutes() {
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="reports" element={<AnalyticsPage />} />
         <Route path="inquiries" element={<AdminInquiriesPage />} />
+        <Route path="buyer-demo" element={<AdminBuyerDemoPage />} />
         <Route path="branding" element={<AdminBrandingPage />} />
         <Route path="product-content" element={<AdminProductContentPage />} />
         <Route path="product-settings" element={<AdminBrandingPage />} />

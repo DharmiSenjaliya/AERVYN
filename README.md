@@ -22,6 +22,8 @@
 
 Built on a unified **React 19 + Three.js (React Three Fiber) + Laravel 12** architecture, *AERVYN* delivers a complete, cohesive commercial package containing:
 - A public **Commercial Showcase & Sales Platform** (`/`) featuring 22+ comprehensive B2B sections, 4-world previews, 8 gameplay mechanics, interactive screenshot gallery with lightbox, video trailer placeholder, deliverables matrix, system requirements, FAQ, and an interactive commercial inquiry form.
+- A dedicated **Interactive Buyer Demo Room** (`/buyer-demo`) featuring a 16-section guided interactive product tour, live WebGL 2.0 browser diagnostics, read-only player & admin showcases, client-side white-label simulator, and feedback rating.
+- A **Private Buyer Demo Access System** (`/admin/buyer-demo`) utilizing cryptographically secure SHA-256 token hashes, session limits, expiration, and instant administrative revocation.
 - An interactive **Buyer Presentation Mode** (`/presentation`) providing a 15-slide guided executive walkthrough deck designed for publisher meetings, investor pitches, and executive review.
 - A dedicated **Printable Product Brochure** (`/brochure`) optimized for both on-screen viewing and browser-native print / PDF export (`window.print()`).
 - An isolated **Buyer Demo Mode** (`/demo`) and **Demo Completion Screen** (`/demo/complete`) with real-time zero-PII conversion funnel telemetry (`/api/demo/telemetry`) allowing prospective buyers to evaluate gameplay responsiveness in under 3 minutes.

@@ -70,6 +70,7 @@ export default function AdminLayout() {
     { label: 'Game Sessions', path: '/admin/sessions', icon: History },
     { label: 'Support & Feedback', path: '/admin/feedback', icon: Megaphone },
     { label: 'Buyer Inquiries', path: '/admin/inquiries', icon: Mail },
+    { label: 'Buyer Demo Access', path: '/admin/buyer-demo', icon: Key },
     { label: 'Analytics', path: '/admin/analytics', icon: BarChart3 },
     { label: 'Reports & CSV', path: '/admin/reports', icon: FileSpreadsheet },
     { label: 'Admin Accounts', path: '/admin/users', icon: ShieldCheck },

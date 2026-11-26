@@ -357,7 +357,7 @@ export default function LandingPage() {
             {content.intro_text}
           </p>
 
-          {/* 4 Main Action CTAs */}
+          {/* 5 Main Action CTAs */}
           <div
             style={{
               display: 'flex',
@@ -368,8 +368,14 @@ export default function LandingPage() {
               marginBottom: '2rem'
             }}
           >
+            <Link to="/buyer-demo" onClick={() => { playPortal(); playClick(); }}>
+              <Button variant="cyan" size="lg" icon={Sparkles} style={{ background: 'linear-gradient(135deg, var(--color-cyan), #7047ff)' }}>
+                BUYER DEMO ROOM
+              </Button>
+            </Link>
+
             <Link to="/demo" onClick={() => { playPortal(); playClick(); }}>
-              <Button variant="cyan" size="lg" icon={Play}>
+              <Button variant="outline" size="lg" icon={Play} className="border-cyan-400 text-cyan-300">
                 PLAY DEMO
               </Button>
             </Link>
@@ -387,8 +393,8 @@ export default function LandingPage() {
             </a>
 
             <Link to="/presentation" onClick={playClick}>
-              <Button variant="ghost" size="lg" icon={Sparkles} style={{ border: '1px solid var(--border-purple)', color: '#d8b4fe' }}>
-                BUYER PRESENTATION MODE
+              <Button variant="ghost" size="lg" icon={Monitor} style={{ border: '1px solid var(--border-purple)', color: '#d8b4fe' }}>
+                BUYER PRESENTATION
               </Button>
             </Link>
           </div>

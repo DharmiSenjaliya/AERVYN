@@ -9,6 +9,12 @@ use App\Models\GameSession;
 
 class UserJourneyE2ETest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+    }
+
     /**
      * Complete User Journey: Registration -> Login -> Dashboard -> World 1 -> World 2 -> World 3 -> Final Chapter -> Ending A
      */

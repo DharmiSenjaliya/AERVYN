@@ -36,6 +36,8 @@ use App\Http\Controllers\Admin\AdminInquiryController;
 use App\Http\Controllers\BrandingController;
 use App\Http\Controllers\Admin\AdminBrandingController;
 use App\Http\Controllers\Admin\AdminProductContentController;
+use App\Http\Controllers\BuyerDemoController;
+use App\Http\Controllers\Admin\AdminBuyerDemoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +53,14 @@ Route::prefix('auth')->middleware('throttle:auth')->group(function () {
 Route::post('/feedback', [AdminFeedbackController::class, 'store'])->middleware('throttle:auth');
 Route::post('/inquiries', [BuyerInquiryController::class, 'store'])->middleware('throttle:auth');
 Route::post('/demo/telemetry', [BuyerInquiryController::class, 'recordDemoTelemetry']);
+
+// Buyer Demo & Guided Walkthrough Endpoints
+Route::prefix('buyer-demo')->group(function () {
+    Route::post('/validate-token', [BuyerDemoController::class, 'validateToken'])->middleware('throttle:auth');
+    Route::post('/session/ping', [BuyerDemoController::class, 'recordSessionPing']);
+    Route::post('/session/feedback', [BuyerDemoController::class, 'submitFeedback']);
+    Route::get('/sample-data', [BuyerDemoController::class, 'getShowcaseSampleData']);
+});
 
 // Public Branding & Features Configuration
 Route::prefix('config')->group(function () {
@@ -215,5 +225,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/product-content', [AdminProductContentController::class, 'index']);
         Route::put('/product-content', [AdminProductContentController::class, 'update']);
         Route::post('/product-content/reset', [AdminProductContentController::class, 'reset']);
+
+        // 17. Buyer Demo Access & Link Management
+        Route::get('/buyer-demo/links', [AdminBuyerDemoController::class, 'index']);
+        Route::post('/buyer-demo/links', [AdminBuyerDemoController::class, 'store']);
+        Route::post('/buyer-demo/links/{id}/revoke', [AdminBuyerDemoController::class, 'revoke']);
+        Route::get('/buyer-demo/analytics', [AdminBuyerDemoController::class, 'analytics']);
     });
 });
